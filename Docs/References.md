@@ -4,7 +4,14 @@ Resources, Readings, and References
 
 ## Textbook
 
-The course will make regular reference to {cite:p}`Gezerlis:2020`.
+The textbooks for this course are:
+
+* {cite:p}`Donoghue:2022`
+* {cite:p}`Langacker:2017`
+* {cite:p}`t-Hooft:2016`
+* {cite:p}`Georgi:2019`
+
+For details, please see the {ref}`sec:sylabus`.
 
 (sec:references)=
 References

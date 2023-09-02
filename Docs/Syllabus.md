@@ -1,33 +1,6 @@
 (sec:sylabus)=
 # Syllabus
 
-::::{margin}
-:::{warning}
-Customize this section for your course!
-:::
-::::
-::::{admonition} Instructor Notes
-This syllabus contains sample content from the WSU course **Physics 455/555: Quantum
-Technologies and Computation** as offered Fall 2022.  These sections need to be replaced
-with appropriate material for your course.  Material that needs to be customized
-has a "Customize" margin note.  In the code look for: 
-
-    ::::{margin}
-    :::{warning}
-    Customize this section for your course!
-    :::
-    ::::
-
-Once the material is suitably customize, just remove the margin note.
-::::
-
-::::{margin}
-:::{warning}
-Customize this section for your course!  Most of this should come from the cookiecutter
-template `.cookiecutter.yaml`, but it might need some attention.
-
-:::
-::::
 ## Course Information
 
 - **Instructor(s):** Michael McNeil Forbes [`m.forbes+581@wsu.edu`](mailto:m.forbes+581@wsu.edu)
@@ -48,58 +21,94 @@ template `.cookiecutter.yaml`, but it might need some attention.
 ### Prerequisites
 <!-- Only required for undergraduate courses, but is useful for graduate courses -->
 
-:::{admonition} Customize for Course
 This course is intended for a broad audience.  As such, the only formal background
-assumed is a strong background in linear algebra as described in {ref}`sec:linear-algebra`.
+assumed is a strong background in fundamental mathematical techniques, including complex
+analysis, calculus, differential equations, and linear algebra as described in
+{ref}`sec:linear-algebra`.
 
-Familiarity with quantum mechanics, classical information theory, and the foundations of
-computer science may be useful, but are not required.  The course will focus on
-finite-dimensional systems where a deep understanding of complex vector spaces and
-matrices will suffice.
-:::
+Familiarity with the core physics areas of classical mechanics, quantum mechanics,
+statistical mechanics, and electromagnetism would be helpful, but we will try to
+supplement any missing knowledge in the course.  (Speak up if you have a gap!)
 
-::::{margin}
-:::{warning}
-Customize this section for your course!
-:::
-::::
 ### Textbooks and Resources
 
 #### Required
 :::{margin}
-ISBN:9781107002173, EISBN:9780511990809
+ISBN:9780691223483
 :::
-[Nielsen and Chuang: "Quantum Computation and Quantum Information" (2010)][Nielsen:2010 (ProQuest)]
-:  This is the principle textbook for the course by two of the founders of the field.
-   It provides a reasonably accessible, but very thorough review of the field, replete
-   with references and history.  It may be a bit dense on first reading, but lays out a
-   complete self-contained foundation.  It is available through the [WSU
-   Library][Nielsen:2010 (WSU)] electronically through [ProQuest][Nielsen:2010
-   (ProQuest)] (requires WSU sign-in).
+[Donoghue and Sorbo: "A Prelude to Quantum Field Theory" (2022)][Donoghue:2022]
+: {cite:p}`Donoghue:2022` This is a principle textbook for the course.  It contains a
+  fairly accessible introduction to the types of manipulations needed to do quantum
+  field theory calculations.  Unfortunately, the eBook and required reader are pretty
+  awful, so I highly recommend purchasing a paper copy.  Occasionally these go on sale
+  for half-price.
 
 :::{margin}
-The basic idea is that key concepts are presented as simple questions that you are
-repeatedly asked.  If you remember the concepts, then the frequency at which you are
-asked is reduced.  This is similar to using flash-cards, but with an automated delivery
-schedule optimized by cognition research for maximal retention.
-
-For a discussion, see [Augmenting Long-term Memory](http://augmentingcognition.com/ltm.html)
+EISBN:9781315170626
 :::
-[Quantum Country][] by Andy Matuschak and Michael Nielsen
-:  A unique presentation of some of the key concepts in quantum computing and quantum
-   mechanics by one of the authors of the principle textbook.  This is required reading
-   for the course.  It is not a traditional textbook, nor is it a complete presentation
-   of the material, but presents key concepts using a new mnemonic medium to help you
-   remember the core concepts.  We use this mnemonic medium in our notes and encourage
-   you to explore further using tools like [Anki][] to make notes for yourself (but see
-   [Augmenting Long-term Memory][] -- there is an art to making good notes).
+[Langacker: "The Standard Model and Beyond (2017)][Langacker:2017]
+: {cite:p}`Langacker:2017` This is a principle textbook for the course.  It contains a
+  complete and fairly straightforward introduction to the form of The Standard Model, as
+  well as a nice discussion of possible extensions.  The CRC Press has made this [open
+  access][Langacker:2017], making this an economical option.  Some of this will be a bit
+  tough going if you don't have the background, but my hope is that you can follow the
+  discussion and use it as a reference once you complete the course.
 
+:::{margin}
+ISBN:9780367091729 EISBN:9780429499210
+:::
+[Georgi: "Lie Algebras in Particle Physics" (2019)][Georgi:2019]
+: {cite:p}`Georgi:2019` This is a fun introduction to group theory and Lie algebras with
+  a focus on building the Standard Model.  The CRC Press has made this [open
+  access][Georgi:2019].
+  
+['t Hooft: "The Conceptual Basis of Quantum Field Theory"][t-Hooft:2016]
+: {cite:p}`t-Hooft:2016` This is a set of notes by Gerard 't Hooft that briefly
+  discusses some of the conceptual foundations and issues with QFT and the Standard
+  Model. 't Hooft has one of the most beautiful and deep understandings of field theory,
+  and does not shy away from some of the difficult aspects of the field.  This will
+  probably be hard going, but should give you a flavor for some of the subtle and deep
+  aspects of the field.
+
+[Donoghue:2022]: <https://press.princeton.edu/books/paperback/9780691223483/a-prelude-to-quantum-field-theory>
+[Langacker:2017]: <https://www.taylorfrancis.com/books/oa-mono/10.1201/b22175/standard-model-beyond-paul-langacker>
+[t-Hooft:2016]: <https://webspace.science.uu.nl/~hooft101/lectures/basisqft.pdf>
+[Georgi:2019]: <https://doi.org/10.1201/9780429499210>
 
 #### Additional Resources
 
-[Preskill: "Quantum Computation"][Preskill (Physics/CS 219)]
-:  Online notes from John Preskill.  These provide more theoretical foundation that
-   complements {cite:p}`Nielsen:2010`.
+Here are some additional optional resources.  Although they are not official texts for
+the course, I will often refer to sections of them.  Feel free to ask questions about
+these in class.
+
+* {cite:p}`Zee:2010`: "Quantum Field Theory in a Nutshell".  This is a fun book to read
+  by one of the masters of the field.  However, Zee presents things in such a way that
+  it is easy for readers to feel they understand more than they do.  This book should be
+  read in conjunction with a more careful text, and used for perspective.
+* {cite:p}`Zee:2023`: "Quantum Field Theory, As Simply As Possible".  Bedtime reading
+  with minimal equations.  Another good complement for a more serious text to help you
+  gain perspective (if you enjoy Zee's style).
+* {cite:p}`Donoghue:2014`: "Dynamics of the Standard} Model".  This is a serious
+  and complete presentation of the Standard Model, similar to {cite:p}`Langacker:2017`,
+  but more complete, and, consequently, more difficult to understand.  It is a great
+  reference, but I fear will be very difficult for most students to understand.
+* {cite:p}`Lancaster:2014`: "Quantum Field Theory for the Gifted Amateur".  A fairly
+  easy textbook to start with if you want to learn QFT more thoroughly.
+* {cite:p}`Maggiore:2005`: "A Modern Introduction to Quantum Field Theory".  Another
+  good starting textbook that develops QFT technology starting from symmetries.
+* {cite:p}`Nastase:2019`: "Classical Field Theory".  A comprehensive presentation of
+  classical field theory – i.e. electromagnetism, gravitation, etc.  This is a good
+  place to refresh your knowledge of relativity.
+
+* {cite:p}`Cornwell:1997`: "Group Theory for Physics" A very fast and thorough
+  introduction to group theory and its applications to physics.  Skips over proofs (with
+  references) to emphasize the physics.
+* {cite:p}`Boyd:1999` "The Devil's Invention: Asymptotic, Superasymptotic and
+  Hyperasymptotic Series", and {cite:p}`Bender:1999` "Advanced Mathematical Methods for
+  Scientists and Engineers I: Asymptotic Methods and Perturbation Theory": These provide
+  technical details about asymptotic series of the type common in QFT. 
+* {cite:p}`Huang:2013` A fun high-level discussion of renormalization.  Fig. 13 provides
+  the basis for my general picture of physics.
 
 Additional readings and references will be provided as needed.  Please see
 {ref}`sec:readings` for details.
@@ -107,85 +116,144 @@ Details and further resources will also be included on the lecture pages on the
 [Canvas](https://wsu.instructure.com/courses/1688766) server.
 
 
-[Augmenting Long-term Memory]: <http://augmentingcognition.com/ltm.html> 
-  "Michael Nielsen's discussion about how to use Anki effectively"
-[Quantum Country]: <https://quantum.country/>
-[Nielsen:2010 (ProQuest)]:
-  <https://ntserver1.wsulibs.wsu.edu:2171/lib/wsu/detail.action?docID=647366>
-[Nielsen:2010 (WSU)]:
-  <https://searchit.libraries.wsu.edu/permalink/f/1jnr272/TN_cdi_askewsholts_vlebooks_9780511985249>
-[Preskill (Physics/CS 219)]:
-  <http://www.theory.caltech.edu/~preskill/ph229/>
 
+:::{margin}
+In this course, the term "Standard Model" refers to the "Standard Model of Particle
+Physics" in contradistinction to the "Standard Model of Cosmology" which includes the
+components of inflation, the big bang, dark matter and dark energy (sometimes called
+ΛCDM - for dark energy expressed as a cosmological constant "Λ" plus cold dark matter),
+etc.
 
-::::{margin}
-:::{warning}
-Customize this section for your course!
+These two "Standard Models" are the most accurate and perplexing physical models we
+have. They are perplexing in that we know they are wrong, but have no direct evidence
+about how they breakdown.
 :::
-::::
 ### Student Learning Outcomes
 
-**Physics 455/555:** By the end of this course, all students will:
+* **Dimensional Analysis**: All physical quantities are formed of four
+  fundamental dimensions: **mass**, **time**, **distance**, and **charge**.  This
+  affords a tremendously powerful technique called dimensional analysis that allows
+  physicists to quickly estimate the form of an answer before doing any calculation.
+  Dimensional analysis also allows one to check a calculation **or** to simplify a
+  calculation by setting up to three independent quantities equal to unity.
+  
+  In discussions of the Standard Model, we often set $\hbar = c = 1$, thereby making
+  equivalent energy, inverse time, and inverse length.
 
-1. Know the postulates of quantum mechanics and their consequences. 
-2. Be able to analyze quantum circuits. 
-3. Be familiar with the fundamental quantum algorithms. 
-4. Be familiar with current technologies being explored for realizing quantum computing. 
-5. Be able to use a quantum simulation or computing platform to implement quantum algorithms.
-6. Be aware of the potential advantages offered by quantum technologies, but cognizant
-   of the physical challenges and limitations.
+* **Symmetries and Conservation Laws**: Symmetry plays a deep role in the formulation of
+  physical theories.  Through [Noether's theorem][], continuous symmetries lead to
+  conservation laws.  For example:
+  * Translation invariance ⟹ conservation of linear momentum;
+  * Rotational invariance ⟹ conservation of angular momentum;
+  * Time-translation invariance ⟹ conservation of energy.
+  
+  In the Standard Model, various other symmetries associated with Lie groups, give rise
+  to various conserved **charges** that play a fundamental role.  (E.g. electric charge,
+  baryon number, lepton number).  Symmetries also greatly restrict the allowed terms,
+  leading to a complete specification of the model on a few simple properties.
 
-**Physics 555:** Graduate students will additionally:
+[Noether's theorem]: <https://en.wikipedia.org/wiki/Noether's_theorem>
 
-7. Be able to review the literature about a specific topic relevant to the course that
-   is under active investigate, and present a critical summary of this topic to the
-   class considering the previous outcomes.
+* Understand the ingredients and basic structure of the Standard Model, and how these
+  come together to explain matter and its interactions.  This includes the following:
+  * Quantum Field Theory (QFT) as the framework.
+  * Fundamental space-time symmetries:
+    * Relativistic Poincare invariance (Lorentz invariance + translations).
+    * Non-relativistic limit of Galilean invariance (Rotations + boosts + translations).
+    * CPT: Charge conjugation times parity times time-reversal invariance.  (Relates
+      particles to anti-particles).
+  * Representation of symmetries with groups.
+  * Organization of matter in terms of spinors -- representations of the Poincare group.
+    * Spin 0 fields (scalar bosons): the **Higgs** field.
+    * Spin 1/2 fields (spinor fermions): **Electron**, **muon**, and **tauon**;
+      Corresponding **Neutrinos**; **Quarks**.
+    * Spin 1 fields (vector bosons): Mediators of force (interactions).  These vector
+      bosons must be massless to avoid negative energies, and this ensured by imposing
+      gauge symmetries  The following gauge bosons exist in the standard model:
+      * $U(1)$: **Photon** (electromagnetic interactions)
+      * $SU(2)$: **$W$ and $Z$ bosons** (weak interactions)
+      * $SU(3)$: **Gluons** (strong interaction)
 
-::::{margin}
-:::{warning}
-Customize this section for your course!
-:::
-::::
+      *Note: The Higgs mechanism complicates the relationship betweem the bare gauge
+      bosons that form the $SU(3)\times SU(2) \times U(1)$ gauge group of the standard
+      model.*
+    * Spin 2 fields: **Graviton**. Know that gravity fits within the framework of the
+      Standard Model, but fails to be renormalizable (see below), rendering such a
+      theory of gravity incomplete and lacks predictive power.
+  * Principle of mass dimension and renormalizability.
+* Understand how to combine these ingredients to form the Standard Model as the most
+  general quantum field theory with these matter and gauge fields that satisfies all
+  known symmetry constraints and includes only renormalizable terms.
+* **QED**: Quantum electrodynamics consists of the QFT containing the electron and the
+  photon.  Including atomic nuclei (made of protons and neutrons), this theory describes
+  virtually all of the world we interact with daily, including most physical systems,
+  chemistry, and biology.  This is the lowest energy scale of the Standard Model,
+  dealing with atomic energies (eV to keV) and lengths scales on the order of
+  angstroms (1Å=$10^{-10}$m) (think of the ground state of a Hydrogen atom etc.).
+* **EW**: Adding to QED the $W$ and $Z$ bosons, as well as massive **mesons**
+  (**pions**, **kaons**, and **tauons**) one obtains electroweak theory which includes
+  phenomena such as radioactive decay: something we experience, but not on a daily basis
+  (I hope!).  These occur at energies in the MeV range and lengths scales of picometers (1pm$=10^{-12}$m).
+* **QCD**: Quantum chromodynamics includes the quarks and gluons as degrees of freedom.
+  From these, we obtain the proton, neutron, and mesons included in the previous
+  low-energy theories.  These interactions have energies of GeVs on the scale of a
+  fermtometer (sometimes called a "fermi") 1fm$=10^{-15}$m.
+* **Asymptotic Freedom**: QCD alone has another special feature -- the interactions
+  become weaker and weaker as one goes to higher energy.  This means that as one probes
+  with higher energies (equivalently, shorter length scales), the theory becomes
+  non-interacting.  This introduces the tantalizing possibility that QCD is a correct
+  theory "all the way down".  This is in contrast with QED, where the interactions get
+  stronger at short distance, ultimately leading to a fundamental divergence (sometimes
+  called the "Landau Pole") that tells us the theory cannot be complete mathematically.
+* **Renormalization and Regularization:** From this description you see that the theory
+  looks different at different energy scales.  This is the idea of renormalization
+
+
+These ingredients and principles require many interesting and subtle mathematical
+tools.  A good portion of this course will be devoted to explaining these tools, which
+might have applications elsewhere.
+
+* **Perturbation Theory and Feynman Diagrams:**
+* **Path Integrals and Generating Functions:**
+* **Green's functions:**
+* **Asymptotic Series:**
+* **Complex Analysis:**
+
 ### Expectations for Student Effort
 
-For each hour of lecture equivalent, all students should expect to have a minimum of two
-hours of work outside class.  All students are expected to keep up with the readings
+For each hour of lecture equivalent, all students should expect to have a minimum of one
+hour of work outside class.  All students are expected to keep up with the readings
 assigned in class, asking questions through the Perusall/Hypothes.is forums, complete
 homework on time, and prepare their projects/presentations.
 
-::::{margin}
-:::{warning}
-Customize this section for your course!
-:::
-::::
 ### Assessment and Grading Policy
 
-Assessment and Grading Policy 
+There are two options for obtaining a grade in this course.
 
-**Physics 455/555:** Students will be assessed with 5 weekly assignments to ensure that
-the content-based learning outcomes 1 through 4 are realized.  The first four
-assignments will be due at the start of week following that when the material is
-presented. The fifth assignment will have students complete exercises using a platform
-like Qiskit (learning outcome 5).  These assignments will be worth 70% of the final
-grade (15% each for assignments 1-4, 10% for assignment 5). Late assignments will not be
-accepted unless prior arrangements are made with the instructor. The course will have no
-examinations.
-
-**Physics 455:** Undergraduates will be required to complete a quantum computation
-project, worth the remaining 30% of the student’s grade, using one of the available
-quantum simulation or computing platforms, and to report on this, discussing any
-limitations imposed by real hardware, errors, decoherence, etc. (Learning outcomes 5 and
-6). Projects are due at the start of the final week of class. Late submissions will not
-be accepted unless prior arrangements are made with the instructor.
-
-**Physics 555:** Graduate students must make a presentation, worth the remaining 30% of
-the student’s grades, about an active research topic relevant to the course, subject to
-instructor approval, and must demonstrate a review of the appropriate literature
-relevant to this topic. (Learning outcome 7).  These presentations will be made in weeks
-5-16 of the course, interspersed with related discussions and background material.
-Presentations might take the form of a lecture or in-class presentation, or could
-consist of a set of notes in the style of the course documentation.  Both must include
-references.
+* Complete all the assignments, obtaining a grade according to the following scale.
+* Keep and submit a **class notebook** wherein you document your attempts to learn the
+  material.  This notebook should contain at a minimum, dates and times when you work,
+  state your learning goals, and then summarize what worked and what did not.  I expect
+  that when you run into difficulties (as documented in your notebook), that you bring
+  these issues to my attention in class, on the forums, or at office hours.  If you
+  document a good attempt to learn the material covered in the assignments, then you
+  will get an A for that assignment, even if you cannot successfully complete it.
+  
+  Your **class notebook** can be kept electronically on CoCalc, or you can submit scans
+  of your physical notebook.
+  
+  :::{margin}
+  Establishing precedence with an electronic notebook is a challenge.  One way to do
+  this would be to publish regularly to a dated public repository such as [GitLab][].  A
+  more secure approach might be to use and establish a
+  [Blockchain](https://en.wikipedia.org/wiki/Blockchain).  This would be an interesting
+  topic for discussion.
+  :::
+  You should treat this as a **lab notebook**, meaning that you should not edit it.  It
+  should contain a chronological record of your progress through course, as an
+  experimentalist would maintain chronological records of the experimental process.
+  Such a notebook is extremely valuable.  For example, should you discover something, a
+  notebook can be used to establish academic precedence.
 
 The final grade will be converted to a letter grade using the following scale: 
 
@@ -215,83 +283,49 @@ in classroom activities and discussion. Students who miss class are expected to 
 the missed material on their own, e.g. by borrowing their classmates notes, reviewing
 recorded lectures (if available), etc.
 
-::::{margin}
-:::{warning}
-Customize this section for your course!
-:::
-::::
 ### Course Timeline
+
+As this is the first time we are offering this course as an iSciMath course, the
+schedule well be extremely fluid in response to the experience of the class.
+
 <!-- 16 Weeks -->
 
 :::{margin}
-*Week 1 / Assignment 1*
+*Weeks 1-3*
 :::
-Linear Algebra
-: - Eigenvectors and Eigenvalues
-  - Hermitian
+**The Basis of Physics**
+* Classical Mechanics
+* Quantum Mechanics
+* What is a Quantum Field Theory
+* Zee's Baby Problem
 
 :::{margin}
-*Week 2 / Assignment 2*
+*Week 4*
 :::
-Quantum Mechanics:
-:  -  Postulates.
-   -  Spin ½, Pauli matrices, Rotations.
-   -  EPR pairs.
-   -  Measurement
-      -  POV Measurements
-      -  von Neumann measurements (pointer states)
-   - Entanglement Measures
-   - Bell's Inequalities
-
 :::{margin}
-*Week 3 / Assignment 3*
+*Week 5*
 :::
-Quantum Computing Theory
-:  -  No Cloning
-   -  Universal gates.
-   -  Communication
-      -  Alice, Bob, and Eve
-      -  Superdense coding
-      -  Teleportation
-   
 :::{margin}
-*Week 4 / Assignment 4*
+*Week 7*
 :::
-
-Quantum Circuits and Algorithms
-:  - Grover, Deutsch, Schor
-   - Adiabatic quantum computing
-   - Quantum annealing
-
-
 :::{margin}
-*Weeks 5-13 / Assignment 5 (Qiskit) / 555 Presentations start*
-
-*Week 7 / 455 Project Approval*
-
+*Week 8*
 :::
-Additional topics and presentations
-: The remaining classes will contain a mix of lectures, guest lectures, and graduate
-  student presentations about topics of interest to the class.  Exact content will be
-  tailored to the interests of the current class and may include the following (which
-  provides a partial list of potential topics for graduate student presentations):
-  - Classical programming models and complexity
-  - Quantum programming:  Basic gates, and programming models (universal computing)
-  - Quantum Algorithms
-  - Ion Trapping
-  - Quantum Error Correction: Ancillary qubits
-  - Quantum Complexity: What can be done with quantum computers that cannot be done with
-    classical computers (presumably and provably)
-  - Communication: Encryption protocols
-  - Quantum Optics: Experimental quantum communication
-  - Neutral atoms in lattices and optical tweezers
-  - Atom interferometry 
-  - Entanglement purification/Producing ground states
-  - Superconducting qubits
-  - NV centers
-  - MRI quantum computing
-  - Quantum Simulation
-
+:::{margin}
+*Week 9*
+:::
+:::{margin}
+*Week 10*
+:::
+:::{margin}
+*Week 11*
+:::
+:::{margin}
+*Week 12*
+:::
+:::{margin}
+*Week 13*
+:::
 :::{margin}
 *Week 14*
 :::
@@ -300,26 +334,28 @@ Additional topics and presentations
 :::{margin}
 *Weeks 15-16*
 :::
-Quantum Computing and Presentations
-: **Physics 455:** Undergraduate students will run their computing projects on a quantum
-  simulation or computing platform.
-  
-  **Physics 555:** Remaining students will deliver their presentations to the class.
 
-### Physics 555 Presentation Topics
-
--  Presentations should be 30-40 minutes to leave time for discussion.
--  Please create a folder for your topic in "Notes and Discussions", and upload any
-   slides, notes, or other relevant material for your topic.
--  Please create a Notes document in your folder with the following:
-   -  **Introduction:** Please provide a summary of the topic.
-   -  **References:** Include any helpful references.
-   -  **Questions:** Please curate questions and discussions in this section. Use this
-      section to ask any questions you have while working on your material, and then to
-      help answer classmate questions.  This should be a dynamic section where all
-      members of the course participate.
+**Course Review and Future Directions**
 
 ## Other Information
+
+### Policy for the Use of Large Language Models (LLMs) or Generative AI in Physics Courses
+
+The use of LLMs or Generative AI such as Chat-GPT is becoming prevalent, both in education and in industry.  As such, we believe that it is important for students to recognize the capabilities and inherent limitations of these tools, and use them appropriately.
+
+To this end, **please submit 4 examples of your own devising:**
+* Two of which demonstrate the phenomena of "hallucination" -- Attempt to use the tool to learn something you know to be true, and catch it making plausible sounding falsehoods.
+* Two of which demonstrate something useful (often the end of a process of debugging and correcting the AI).
+
+Note: one can find plenty of examples online of both cases.  Use these to better understand the capabilities and limitations of the AIs, but for your submission, please find your own example using things you know to be true. *If you are in multiple courses, you may submit the same four examples for each class, but are encouraged to tailor your examples to the course.*
+
+Being able to independently establish the veracity of information returned by a search, an AI, or indeed any publication, is a critical skill for a scientist.  **If you are the type of employee who can use tools like ChatGPT to write prose, code etc., but not accurately validate the results, then you are exactly the type of employee that AI will be able to replace.** 
+
+Any use of Generative AI or similar tools for submitted work must include:
+1. **A complete description of the tool.** (E.g. *"ChatGPT Version 3.5 via CoCalc's interface"* or *Chat-GPT 4 through Bing AI using the Edge browser"*, etc.)
+2. **A complete record of the queries issued and response provided.**  (This should be provided as an attachment, appendices, or supplement.)
+3. **An attribution statement consistent with the following:**
+   *“The author generated this <text/code/etc.> in part with <GPT-3, OpenAI’s large-scale language-generation model/etc.> as documented in appendix <1>. Upon generating the draft response, the author reviewed, edited, and revised the response to their own liking and takes ultimate responsibility for the content.”*
 
 ### COVID-19 Statement
 Per the proclamation of Governor Inslee on August 18, 2021, **masks that cover both the
@@ -421,3 +457,5 @@ If you or someone you know is in immediate danger, DIAL 911 FIRST!
 [Official Course Repository]: <https://gitlab.com/wsu-courses/physics-581-the-standard-model> "Official Course Repository hosted on GitLab"
 [Shared CoCalc Project]: <https://cocalc.com/4578ccc8-55cf-413d-9e4c-82c69e30121e/> "Shared CoCalc Project"
 [WSU Courses CoCalc project]: <https://cocalc.com/projects/c31d20a3-b0af-4bf7-a951-aa93a64395f6>
+
+
