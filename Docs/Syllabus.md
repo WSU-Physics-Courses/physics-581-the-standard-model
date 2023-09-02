@@ -321,47 +321,114 @@ Quantum Computing and Presentations
 
 ## Other Information
 
-### COVID-19 Statement
-Per the proclamation of Governor Inslee on August 18, 2021, **masks that cover both the
-nose and mouth must be worn by all people over the age of five while indoors in public
-spaces.**  This includes all WSU owned and operated facilities. The state-wide mask mandate
-goes into effect on Monday, August 23, 2021, and will be effective until further
-notice. 
+### Policy for the Use of Large Language Models (LLMs) or Generative AI in Physics Courses
+
+The use of LLMs or Generative AI such as Chat-GPT is becoming prevalent, both in
+education and in industry.  As such, we believe that it is important for students to
+recognize the capabilities and inherent limitations of these tools, and use them
+appropriately.
+
+To this end, **please submit 4 examples of your own devising:**
+* Two of which demonstrate the phenomena of "hallucination" -- Attempt to use the tool
+  to learn something you know to be true, and catch it making plausible sounding
+  falsehoods.
+* Two of which demonstrate something useful (often the end of a process of debugging and
+  correcting the AI).
+
+Note: one can find plenty of examples online of both cases.  Use these to better
+understand the capabilities and limitations of the AIs, but for your submission, please
+find your own example using things you know to be true. *If you are in multiple courses,
+you may submit the same four examples for each class, but are encouraged to tailor your
+examples to the course.*
+
+Being able to independently establish the veracity of information returned by a search,
+an AI, or indeed any publication, is a critical skill for a scientist.  **If you are the
+type of employee who can use tools like ChatGPT to write prose, code etc., but not
+accurately validate the results, then you are exactly the type of employee that AI will
+be able to replace.** 
+
+Any use of Generative AI or similar tools for submitted work must include:
+1. **A complete description of the tool.** (E.g. *"ChatGPT Version 3.5 via CoCalc's
+   interface"* or *Chat-GPT 4 through Bing AI using the Edge browser"*, etc.)
+2. **A complete record of the queries issued and response provided.**  (This should be
+   provided as an attachment, appendices, or supplement.)
+3. **An attribution statement consistent with the following:**
+   *“The author generated this <text/code/etc.> in part with <GPT-3, OpenAI’s
+   large-scale language-generation model/etc.> as documented in appendix <1>. Upon
+   generating the draft response, the author reviewed, edited, and revised the response
+   to their own liking and takes ultimate responsibility for the content.”*
+
+<!-- ### COVID-19 Statement -->
+<!-- Per the proclamation of Governor Inslee on August 18, 2021, **masks that cover both the -->
+<!-- nose and mouth must be worn by all people over the age of five while indoors in public -->
+<!-- spaces.**  This includes all WSU owned and operated facilities. The state-wide mask mandate -->
+<!-- goes into effect on Monday, August 23, 2021, and will be effective until further -->
+<!-- notice.  -->
  
-Public health directives may be adjusted throughout the year to respond to the evolving
-COVID-19 pandemic. Directives may include, but are not limited to, compliance with WSU’s
-COVID-19 vaccination policy, wearing a cloth face covering, physically distancing, and
-sanitizing common-use spaces.  All current COVID-19 related university policies and
-public health directives are located at
-[https://wsu.edu/covid-19/](https://wsu.edu/covid-19/).  Students who choose not to
-comply with these directives may be required to leave the classroom; in egregious or
-repetitive cases, student non-compliance may be referred to the Center for Community
-Standards for action under the Standards of Conduct for Students.
+<!-- Public health directives may be adjusted throughout the year to respond to the evolving -->
+<!-- COVID-19 pandemic. Directives may include, but are not limited to, compliance with WSU’s -->
+<!-- COVID-19 vaccination policy, wearing a cloth face covering, physically distancing, and -->
+<!-- sanitizing common-use spaces.  All current COVID-19 related university policies and -->
+<!-- public health directives are located at -->
+<!-- [https://wsu.edu/covid-19/](https://wsu.edu/covid-19/).  Students who choose not to -->
+<!-- comply with these directives may be required to leave the classroom; in egregious or -->
+<!-- repetitive cases, student non-compliance may be referred to the Center for Community -->
+<!-- Standards for action under the Standards of Conduct for Students. -->
 
 ### Academic Integrity
 
-Academic integrity is the cornerstone of higher education.  As such, all members of the
-university community share responsibility for maintaining and promoting the principles
-of integrity in all activities, including academic integrity and honest
-scholarship. Academic integrity will be strongly enforced in this course.  Students who
-violate WSU's Academic Integrity Policy (identified in Washington Administrative Code
-(WAC) [WAC 504-26-010(4)][wac 504-26-010(4)] and -404) will fail the course, will not
-have the option to withdraw from the course pending an appeal, and will be Graduate:
-6300, 26300 reported to the Office of Student Conduct.
+You are responsible for reading WSU’s [Academic Integrity Policy][], which is based on
+[Washington State law][]. If you cheat in your work in this class you will: 
 
-Cheating includes, but is not limited to, plagiarism and unauthorized collaboration as
-defined in the Standards of Conduct for Students, [WAC 504-26-010(4)][wac
-504-26-010(4)]. You need to read and understand all of the [definitions of
-cheating][definitions of cheating].  If you have any questions about what is and is not
-allowed in this course, you should ask course instructors before proceeding.
+* Fail the course.
+* Be reported to the [Center for Community Standards][].
+* Have the right to appeal the instructor's decision.
+* Not be able to drop the course or withdraw from the course until the appeals process
+  is finished.
 
-If you wish to appeal a faculty member's decision relating to academic integrity, please
-use the form available at \_communitystandards.wsu.edu. Make sure you submit your appeal
-within 21 calendar days of the faculty member's decision.
+If you have any questions about what you can and cannot do in this course, ask your instructor.
 
-Academic dishonesty, including all forms of cheating, plagiarism, and fabrication, is
-prohibited. Violations of the academic standards for the lecture or lab, or the
-Washington Administrative Code on academic integrity
+If you want to ask for a change in the instructor's decision about academic integrity,
+use the form at the [Center for Community Standards][] website. You must submit this
+request within 21 calendar days of the decision.
+
+[Academic Integrity Policy]: 
+  <https://communitystandards.wsu.edu/policies-and-reporting/academic-integrity-policy/>
+[Washington State law]: <https://apps.leg.wa.gov/wac/default.aspx?cite=504-26-202>
+[Center for Community Standards]: <https://communitystandards.wsu.edu/>
+
+<!-- Academic integrity is the cornerstone of higher education.  As such, all members of the -->
+<!-- university community share responsibility for maintaining and promoting the principles -->
+<!-- of integrity in all activities, including academic integrity and honest -->
+<!-- scholarship. Academic integrity will be strongly enforced in this course.  Students who -->
+<!-- violate WSU's Academic Integrity Policy (identified in Washington Administrative Code -->
+<!-- (WAC) [WAC 504-26-010(4)][wac 504-26-010(4)] and -404) will fail the course, will not -->
+<!-- have the option to withdraw from the course pending an appeal, and will be Graduate: -->
+<!-- 6300, 26300 reported to the Office of Student Conduct. -->
+
+<!-- Cheating includes, but is not limited to, plagiarism and unauthorized collaboration as -->
+<!-- defined in the Standards of Conduct for Students, [WAC 504-26-010(4)][wac -->
+<!-- 504-26-010(4)]. You need to read and understand all of the [definitions of -->
+<!-- cheating][definitions of cheating].  If you have any questions about what is and is not -->
+<!-- allowed in this course, you should ask course instructors before proceeding. -->
+
+<!-- If you wish to appeal a faculty member's decision relating to academic integrity, please -->
+<!-- use the form available at \_communitystandards.wsu.edu. Make sure you submit your appeal -->
+<!-- within 21 calendar days of the faculty member's decision. -->
+
+<!-- Academic dishonesty, including all forms of cheating, plagiarism, and fabrication, is -->
+<!-- prohibited. Violations of the academic standards for the lecture or lab, or the -->
+<!-- Washington Administrative Code on academic integrity -->
+
+### University Syllabus
+<!-- Required as of Fall 2023 -->
+
+Students are responsible for reading and understanding all university-wide policies and
+resources pertaining to all courses (for instance: accommodations, care resources,
+policies on discrimination or harassment), which can be found in the [university
+syllabus][].
+
+[university syllabus]: <https://syllabus.wsu.edu/university-syllabus/>
 
 ### Students with Disabilities
 
