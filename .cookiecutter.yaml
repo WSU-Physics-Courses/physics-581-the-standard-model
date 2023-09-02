@@ -1,0 +1,51 @@
+default_context:
+  use_course: "yes"
+  use_docs: "yes"
+  use_cocalc: "yes"
+  institution: "Washington State University (WSU)"
+  department: "Physics"
+  campus: "Pullman"
+  campus_state: "WA"
+  course_number: "581"
+  course_section: "01"
+  title: "The Standard Model of Particle Physics"
+  #short_title: "Learning from Signals"
+  year: "2023"
+  term: "Fall"
+  class_time: "MW, 4:10pm - 4:00pm"
+  class_room: "[Webster 941](https://sah-archipedia.org/buildings/WA-01-075-0008-13)"
+  wsu_class_number: "14885"   # Listed next to course on https://schedules.wsu.edu/
+  zoom_number: "965 1287 6810"
+  canvas_url: "https://wsu.instructure.com/courses/1688766"
+  perusall_url: "https://app.perusall.com/courses/2023-fall-physics-581-pullm-1-01-14885-adv-topics-in-physics/"
+  author: "Michael McNeil Forbes"
+  author_email: "m.forbes+{{cookiecutter.course_number}}@wsu.edu"
+  office: "Webster 947F"
+  phone: "(509) 720-8095"
+  office_hours: "TBD"
+#  personnel:
+#    instructors: [
+#      'Kevin R. Vixie [`kvixie+{{cookiecutter.course_number}}@wsu.edu`](mailto:kvixie+{{cookiecutter.course_number}}@wsu.edu)',
+#  'Michael McNeil Forbes [`m.forbes+{{cookiecutter.course_number}}@wsu.edu`](mailto:m.forbes+{{cookiecutter.course_number}}@wsu.edu)']
+#    assistants: ["TBA"]
+  gitlab_url: "https://gitlab.com/wsu-courses/physics-581-the-standard-model"
+  github_url: "https://github.com/WSU-Physics-Courses/physics-581-the-standard-model"
+
+  # The following should get the resources and place them in _ext/Resources
+  resources_url: "https://gitlab.com/wsu-courses/physics-581-the-standard-model_resources"
+  rtd: "physics-581-the-standard-model"
+
+  # This is the WSU Courses project... it usually does not change.
+  cocalc_course_project: "c31d20a3-b0af-4bf7-a951-aa93a64395f6"
+
+  # This is the Shared Project which changes for each class.
+  cocalc_project: "4578ccc8-55cf-413d-9e4c-82c69e30121e"
+
+  nsf_grant: "2012190"
+  
+  # The remaining configuration options deal with provisioning of the environment etc.
+  use_conda: "micromamba"
+  use_pyproject: "no"
+  use_manin: "yes"
+  make_tools: "yes"
+
