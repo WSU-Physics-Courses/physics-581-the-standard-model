@@ -1,0 +1,47 @@
+name: phys-581
+channels:
+  - defaults
+dependencies:
+  - python>=3.9
+
+  # Core dependencies
+  - scipy
+  - matplotlib
+  - sympy
+  - ipykernel
+  #- conda-forge::jupyter_console
+
+  # Documentation
+  - jupytext
+  - pandoc
+  - notebook
+  - conda-forge::jupyter_nbextensions_configurator    
+  
+  # Pip-only dependencies
+  - pip
+  - pip:
+    - mmf_setup
+
+    # Testing
+    - pytest-cov
+    - pytest-flake8
+    - pytest-html
+    - pytest-xdist
+    #- sphinx>=7.0.1             # Main documentation system
+    #- myst-parser>=2.0.0        # Support for MyST .md files. Provided by myst-nb
+    - myst-nb>=0.17.2           # Support for notebooks as MyST .md files.
+    - sphinx-design>=0.4.1      # Responsive web design
+    - sphinx-book-theme>=1.0.1  # Main documentation theme.
+    - sphinx-comments           # Hypothes.is comments and annotations
+    - sphinxext-opengraph       # Provides Open Graph Metadata on pages (summaries)
+    - sphinx-togglebutton       # 
+    - sphinxcontrib-zopeext     # Documentation of interfaces (mine)
+    - sphinx-autobuild          # Automatically build and serve (make doc-server)
+    - sphinx-comments # Hypothes.is comments and annotations
+    - sphinxcontrib-bibtex>=2.4.0
+    # https://github.com/executablebooks/sphinx-jupyterbook-latex/issues/97
+    - sphinx-jupyterbook-latex    
+
+    - sphobjinv  # Helps looking up intersphinx references
+    - mmf-setup
+    - ruamel-yaml
