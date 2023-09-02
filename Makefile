@@ -116,6 +116,8 @@ ifdef COCALC_ANACONDA
 	fi
 	make sync
 endif
+	$(_RUN) python3 -m ipykernel install --user --name "phys-581" \
+                                      --display-name "Python 3 (phys-581)"
 
 $(ENV_PATH): environment.yaml
 	$(CREATE_ENV)
@@ -398,9 +400,6 @@ Initialization:
                      reproducibility.
    make lock         Update the software and generate lock files by running
                      `anaconda-project lock`, `pdm lock`, etc.
-   make init         Initialize the environment and kernel.  On CoCalc we do specific things
-                     like install mmf-setup, and activate the environment in ~/.bash_aliases.
-                     This is done by `make init` if COCALC_ANACONDA is defined.
    make info         Print some information.
 
 Testing:
