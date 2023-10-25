@@ -135,7 +135,7 @@ sync:
 
 cleanspace:
 	-find . -name "__pycache__" -exec $(RM) -r {} +
-	-$(RM) -r _htmlcov .coverage .pytest_cache
+	-$(RM) -r _htmlcov .coverage .pytest_cache build
 	-$(_MICROMAMBA) clean --all --yes
 
 cleandocs:

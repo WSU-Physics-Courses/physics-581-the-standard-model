@@ -93,7 +93,17 @@ tools = [
 
 [build-system]
 
-requires = ["setuptools", "wheel"] # PEP 508 specifications.
+requires = ["setuptools", "setuptools-scm"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+# https://github.com/pypa/setuptools/issues/3237
+# No solution as of 2023...
+#build-temp = "_build"
+
+[tool.distutils.egg_info]
+#egg_base = "_build"
+
 ######################################################################
 # MMF-Setup
 # The following allows you to add this ROOT directory to your path so you
