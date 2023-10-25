@@ -12,7 +12,7 @@ kernelspec:
   name: phys-581
 ---
 
-```{code-cell}
+```{code-cell} ipython3
 :tags: [hide-cell]
 
 import mmf_setup;mmf_setup.nbinit()
@@ -21,8 +21,422 @@ import logging;logging.getLogger('matplotlib').setLevel(logging.CRITICAL)
 import numpy as np, matplotlib.pyplot as plt
 ```
 
-(sec:DiracEq)=
-# Dirac Equation
+(sec:Electromagnetism)=
+# Electromagnetism (Classical)
+
+Here we follow the natural approach used to specify the Standard Model in order to
+see the consequences that lead to Maxwell's equations for electromagnetic fields.
+
+The approach we shall use is the following:
+
+1. Establish an appropriate field with appropriate symmetry properties.
+2. Write the most general Lagrangian density we can consider that satisfies the
+   symmetries and limit this to the lowest non-trivial order.
+3. Derive the equations of motions and see the consequencies.
+
+Here is how it will play out:
+
+*  We will consider a vector field $A^{\mu} = (\phi, \vect{A})$ that will ultimately
+   contain the scalar and vector potentials of classical E&M.  This vector field will
+   transform under the same [adjoint representation][] of the Lorentz group as other
+   four-vectors:
+   \begin{gather*}
+     A^\mu \rightarrow \Lambda^{\mu}{}_{\nu}A^{\nu}.
+   \end{gather*}
+   After writing down the lowest order Lagrangian, we shall see that this gives rise to
+   negative energy modes.  Note: these are not negative energy in the same sense as
+   anti-particles, but fundamental -- quantizing without any further restrictions would
+   lead to a Hamiltonian that is unbounded from below.
+*  Currently, the only know solution, is to impose an additional symmetry called
+   gauge-symmetry that renders these negative-energy modes unphysical.
+   
+## Lorentz Invariant Terms
+
+:::{margin}
+In terms of indices, we have
+\begin{gather*}
+  A_{\mu}A^{\mu} = A^{\mu}g_{\mu\nu}A^{\nu},\\
+  A^{\mu} \rightarrow \Lambda^{\mu}{}_{\nu}A^{\nu},\\
+  A_{\mu}A^{\mu} \rightarrow \Lambda_{\mu}{}_{\sigma}\Lambda^{\mu}{}_{\nu}A^{\nu}A^{\sigma},\\
+ \Lambda_{\mu}{}_{\sigma}\Lambda^{\mu}{}_{\nu} = 
+ \Lambda^{\alpha}{}_{\sigma}g_{\alpha\mu}\Lambda^{\mu}{}_{\nu} = g_{\sigma\nu},\\
+ [\mat{\Lambda}^T]_{\sigma}{}^{\alpha}[\mat{g}]_{\alpha\mu}[\mat{\Lambda}]^{\mu}{}_{\nu} 
+ = [\mat{g}]_{\sigma\nu}.
+\end{gather*}
+*Note that the metric $\mat{g}$ is not a matrix like $\mat{\Lambda}$: it makes vectors to
+co-vectors, whereas matrices map vectors to vectors.*
+:::
+It is easy to construct some Lorentz-invariant terms by using the property of the
+[adjoint representation][] that it leaves the metric invariant:
+\begin{gather*}
+  \mat{\Lambda}^T \mat{g} \mat{\Lambda} = \mat{g}.
+\end{gather*}
+The metric $\mat{g}$ is built into the raising and lowering of indices so that invariant
+quantities can be formed by simply ensuring that all indices are contracted.  This
+allows us to form Lorentz-invariant quantities (scalars) like these:
+:::{margin}
+It turns out that one can form additional Lorentz-invariant quantities by using the
+conjugate representations and the 4D [Levi-Civita symbol][].  We will come back to this
+later.
+
+Note also that
+\begin{multline*}
+  \tfrac{1}{2}\partial^{2}A^{2}
+  = \\
+  (\partial_{\mu}A_{\nu})(\partial^{\mu}A^{\nu}) \\
+  + A^{\nu}\partial^{2}A_{\nu}.
+\end{multline*}
+:::
+
+\begin{gather*}
+  \partial_{\mu}A^{\mu}, \qquad
+  A_{\mu}A^{\mu} \equiv A^2, \\
+  \partial^2 A^2, \qquad
+  (\partial_{\mu}A^{\mu})^2, \qquad
+  (\partial_{\mu}A_{\nu})(\partial^{\nu}A^{\mu}), \qquad
+  (\partial_{\mu}A_{\nu})(\partial^{\mu}A^{\nu}).
+\end{gather*}
+The first term is the only way to make a scalar with a single $A^{\mu}$, but on its own,
+is a total derivative: hence it plays no role in the local equations of motion.  It can
+be used in combination with other terms, however.
+The second term is valid and will turn out to give a mass to the corresponding
+particle.
+
+The remaining terms on the next line are the only other terms that can appear if we
+restrict ourselves to at most quadratic order in $A^{\mu}$ and quadratic order in
+derivatives $\partial^{\mu}$ (for reasons of renormalizability as we shall discuss
+later).  If these appear on their own, then we can further reduce this to two
+independent terms since the first is also a total derivative, and the second two are
+equivalent after integrating by parts.
+
+:::{margin}
+Here we follow the argument given in {cite:p}`tHooft:2016` §4, but with our metric conventions.
+:::
+Thus, to this lowest order, we have the following Lagrangian density:
+\begin{gather*}
+  \mathcal{L}(A^{\mu}, \partial_{\mu}A^{\nu}) = 
+  -\tfrac{1}{2}\alpha (\partial_{\mu}A_{\nu})(\partial^{\mu}A^{\nu})
+  + \tfrac{1}{2}\beta (\partial_{\mu}A^{\mu})^2
+  + \tfrac{1}{2} m^2 A^{\mu}A_{\mu}
+  - A^{\mu}J_{\mu}.
+\end{gather*}
+Following the standard procedure, we find the equations of motion
+\begin{gather*}
+  \partial_{\mu} \pdiff{L}{(\partial_{\mu}A_{\nu})} = \pdiff{L}{A_{\nu}},\qquad
+  (\beta \partial^{\nu}\partial_{\mu} - \alpha \delta^{\nu}_{\mu} \partial^2)A^{\mu}
+  = m^2 A^{\nu} - J^{\nu}.
+\end{gather*}
+:::{margin}
+\begin{gather*}
+  \dot{A}^{\mu} \equiv \partial_0 A^{\mu}.
+\end{gather*}
+:::
+We can also compute the canonical momentum $\pi_{\mu}$ and form the Hamiltonian density
+\begin{gather*}
+  \pi_{\mu} = \pdiff{L}{\dot{A}^{\mu}} = 
+  \beta\delta^{0}_{\mu}\partial_{\nu}A^{\nu}
+  -\alpha\dot{A}_{\mu},\qquad
+  \mathcal{H} = \pi_{\mu}\dot{A}^{\mu} - \mathcal{L}.
+\end{gather*}
+Now consider the UV limit of high energy and momentum.  In this limit, the mass and
+current terms become negligible and we can take $m, J^{\mu} \rightarrow 0$.  Now
+consider the form of the Hamiltonian in two limits:
+
+1. First consider when all space-like derivatives $\partial_{i} = \nabla^i = \vect{\nabla}$ and
+   spacelike components $A^{i} = \vect{A}$ are small compared with $\dot{A}^{0}$.
+   In this limit
+   \begin{gather*}
+     \mathcal{H} \rightarrow \tfrac{1}{2}(\beta - \alpha)(\dot{A}^0)^2.
+   \end{gather*}
+   Positivity of the Hamiltonian density in this limit thus requires $\beta \geq \alpha$.
+   :::{margin}
+   The first term here from $-\mathcal{L}$ is positive due to the metric.  In
+   these expressions, there are no more signs from the metric.
+   :::
+2. Now consider the opposite case where $A^{0}$ and all time-like derivatives are negligible:
+   \begin{gather*}
+     \mathcal{H} \rightarrow 
+     \tfrac{1}{2}\alpha (\nabla^{i}A^{j})^2
+     -
+     \tfrac{1}{2}\beta(\vect{\nabla}\cdot \vect{A})^2.
+   \end{gather*}
+   Positivity requires $\alpha \geq \beta$.
+Thus, we conclude that $\alpha = \beta$.
+::::{doit} Do It!
+Show that the second condition implies $\alpha \geq \beta$.
+::::
+::::{solution}
+:show:
+
+We write this as a quadratic form:
+\begin{gather*}
+  \mathcal{H} \rightarrow \tfrac{1}{2}(\nabla^{i}A^{j})M_{ij;ab}(\nabla^{a}A^{b}), 
+  \qquad
+  M_{ij;ab} = \alpha\delta_{ai}\delta_{bj} - \beta\delta_{ij}\delta_{ab}.
+\end{gather*}
+This matrix $\mat{M}$ has an eigenvector $x_{ab} = \delta_{ab}$ with eigenvalue $\alpha -
+3\beta$.  Positivity thus requires $\alpha \geq 3\beta$.
+\begin{gather*}
+  x_{ab} = \delta_{ab}, \\
+  (\alpha-3\beta)\delta_{ij}
+\end{gather*}
+
+
+
+\begin{gather*}
+  a A_{i,j}A_{i,j} - b A_{i, i}A_{j,j}
+\end{gather*}
+::::
+
+```{code-cell} ipython3
+a = 1.23
+b = 0.0000456
+
+I = np.eye(3)
+
+M = (a*np.einsum('ai,bj->ijab', I, I) - b*np.einsum('ab,ij->ijab', I, I)).reshape(9, 9)
+np.linalg.eigvalsh(M)
+```
+
+::::{admonition} Details
+Since we had some difficulties, here is a careful reckoning.  We start with the standard form
+\begin{gather*}
+  \mathcal{L} = -\frac{1}{4}F_{\mu\nu}F^{\mu\nu} = \tfrac{1}{2}(E^2-B^2)
+\end{gather*}
+where
+\begin{gather*}
+  \mat{F}^{\mu\nu}
+  =
+  \begin{pmatrix}
+    0 & -\vect{E}\\
+    \vect{E}^{T} & \mat{\vect{B}\times}
+  \end{pmatrix}
+  =
+  \begin{pmatrix}
+    0 & -E_x & -E_y & -E_z\\
+    E_x & 0 & -B_z & B_y\\
+    E_y & B_z & 0 & -B_x\\
+    E_z & -B_y & B_x & 0
+  \end{pmatrix},\\
+  \mat{F}^{\mu}{}_{\nu}
+  =
+  \begin{pmatrix}
+    0 & \vect{E}\\
+    \vect{E}^{T} & -\mat{\vect{B}\times}
+  \end{pmatrix},\qquad
+  \mat{F}_{\mu\nu}
+  =
+  \begin{pmatrix}
+    0 & \vect{E}\\
+    -\vect{E}^{T} & \mat{\vect{B}\times}
+  \end{pmatrix}.
+\end{gather*}
+The dual field-strength tensor is also important, and can be formed from the
+4-dimensional [Levi-Civita symbol][]:
+\begin{gather*}
+  \varepsilon_{0123} = -\varepsilon^{0123} = 1, \qquad
+  \tilde{F}_{\mu\nu} = \tfrac{1}{2}\varepsilon_{\mu\nu\rho\sigma}F^{\rho\sigma},\\
+  \mat{\tilde{F}}_{\mu\nu} = 
+  \begin{pmatrix}
+    0 & -\vect{B}\\
+    \vect{B}^{T} & -\mat{\vect{E}\times}
+  \end{pmatrix}=
+  \begin{pmatrix}
+    0 & -B_x & -B_y & -B_z \\
+    B_x & 0 & E_z & - E_y\\
+    B_y & -E_z &  0 & E_x\\
+    B_z & E_y & -E_x & 0
+  \end{pmatrix},
+  
+\end{gather*}
+
+
+Note that the dual tensor $\tilde{F}_{\mu\nu}$ is obtained from $F^{\mu\nu}$ by replacing
+\begin{gather*}
+  \vect{E} \mapsto \vect{B}, \qquad
+  \vect{B} \mapsto -\vect{E}.
+\end{gather*}
+Contracting, we have the following, which gives us the expression for $\mathcal{L}$ above:
+\begin{align*}
+  F_{\mu\nu}F^{\mu\nu} &= 2(B^2 - E^2), &
+  \tilde{F}_{\mu\nu}\tilde{F}^{\mu\nu} &= 2(E^2 - B^2), &
+  \tilde{F}_{\mu\nu}F^{\mu\nu} &= 2\vect{B}\cdot\vect{E}.
+\end{align*}
+\begin{gather*}
+  F^{\mu\rho}F_{\rho\nu} =
+  2\begin{pmatrix}
+    E^2 & \vect{B}\times\vect{E}\\
+    (\vect{B}\times\vect{E})^T &
+    \vect{B}\vect{B}^T - B^2\mat{1}
+  \end{pmatrix}
+\end{gather*}
+
+
+
+
+
+We consider terms in the
+Lagrangian one at a time, including their contribution to the momentum:
+\begin{gather*}
+  (\partial_{\mu}A_{\nu})(\partial^{\mu}A^{\nu})
+  = \dot{A}_{\nu}\dot{A}^{\nu} - \vect{\nabla}A_{\nu}\cdot\vect{\nabla}A^{\nu}
+  = \dot{A}_0^2 - \dot{\vect{A}}^2 - (\vect{\nabla}A_0)^2 + (\nabla_{i}A_{j})(\nabla_{i}A_{j}),\\
+  (\partial_{\mu}A_{\nu})(\partial^{\nu}A^{\mu})
+  = \dot{A}^{\nu}\partial_{\nu}A_0 + \vect{\nabla}A^{\nu}\cdot\partial_{\nu}\vect{A} 
+  = \dot{A}_0^2 + 2\dot{\vect{A}}\cdot\vect{\nabla}A_0 + (\nabla_{i}A_{j})(\nabla_{j}A_{i}),\\
+  (\partial_{\mu}A^{\mu})^2
+  = (\dot{A}_0 + \vect{\nabla}\cdot\vect{A})^2
+  = \dot{A}_0^2 + 2\dot{A}_0\vect{\nabla}\cdot\vect{A} + (\vect{\nabla}\cdot\vect{A})^2.
+\end{gather*}
+The last two are equivalent under integration by parts twice.  Here are the
+corresponding contributions to the momentum $\pi^{\mu}$:
+\begin{gather*}
+  \tfrac{1}{2}\pdiff{(\partial_{\mu}A_{\nu})(\partial^{\mu}A^{\nu})}{\dot{A}_{\mu}}
+  = \dot{A}^{\mu} = \begin{pmatrix}
+    \dot{A}_0\\
+    \dot{\vect{A}}
+  \end{pmatrix},\\
+  \tfrac{1}{2}\pdiff{(\partial_{\mu}A_{\nu})(\partial^{\nu}A^{\mu})}{\dot{A}_{\mu}}
+  = \partial^{\mu}A_0
+  = \begin{pmatrix}
+    \dot{A}_0\\
+    -\vect{\nabla}A_0
+  \end{pmatrix},\\
+  \tfrac{1}{2}\pdiff{(\partial_{\mu}A^{\mu})^2}{\dot{A}_{\mu}}
+  = g^{0\mu}\partial_{\nu}A^{\nu}
+  = \begin{pmatrix}
+    \dot{A}_0 + \vect{\nabla}\cdot\vect{A}\\
+    \vect{0}
+  \end{pmatrix}.
+\end{gather*}
+The corresponding contributions to the Hamiltonian density are:
+\begin{gather*}
+  \dot{A}^{\mu}\dot{A}_{\mu} 
+  - \tfrac{1}{2}(\partial_{\mu}A_{\nu})(\partial^{\mu}A^{\nu}) 
+  = \tfrac{1}{2}\dot{A}_0^2 - \tfrac{1}{2}\dot{\vect{A}}^2
+  + \tfrac{1}{2}[(\vect{\nabla}A_0)^2 - (\nabla_{i}A_{j})(\nabla_{i}A_{j})],\\
+  \dot{A}^{\mu}\partial_{\mu}A_0 
+  - \tfrac{1}{2}(\partial_{\mu}A_{\nu})(\partial^{\nu}A^{\mu})
+  = \tfrac{1}{2}\dot{A}_0^2 - \tfrac{1}{2}(\nabla_{i}A_{j})(\nabla_{j}A_{i}),\\
+  \dot{A}_{0}\partial_{\nu}A^{\nu}
+  -\tfrac{1}{2}(\partial_{\mu}A^{\mu})^2
+  = \tfrac{1}{2}\dot{A}_0^2 - \tfrac{1}{2}(\vect{\nabla}\cdot\vect{A})^2.
+\end{gather*}
+
+Thus, if we start with the Lagrangian density
+\begin{gather*}
+  \mathcal{L} = \tfrac{1}{2}\Bigl(
+    -(\partial_{\mu} A_\nu)(\partial^{\mu} A^\nu)
+    +
+    (\partial_{\mu} A_\nu)(\partial^{\nu} A^\mu)
+  \Bigr),
+\end{gather*}
+then our Hamiltonian density will have the form
+\begin{gather*}
+  \mathcal{H} = \tfrac{1}{2}\Bigl(
+    \dot{\vect{A}}^2
+    -(\vect{\nabla}A_0)^2 
+    + 
+    \underbrace{(\nabla_{i}A_{j})(\nabla_{i}A_{j})
+    - (\nabla_{i}A_{j})(\nabla_{j}A_{i})}_{B^2} 
+    \Bigr),\\
+    = \tfrac{1}{2}\Bigl(
+    E^2 + B^2 
+    -2\vect{\nabla}A_0\cdot(\vect{\nabla}A_0 - \dot{\vect{A}})
+    \Bigr),\\
+    = \tfrac{1}{2}\Bigl(
+    E^2 + B^2 
+    +2\vect{\nabla}A_0\cdot\vect{E}
+    \Bigr),\\
+\end{gather*}
+Expressing this in terms of the electric and magnetic fields, we have
+\begin{gather*}
+  \vect{E} = -\vect{\nabla}A_0 - \dot{\vect{A}}, \qquad
+  \vect{B} = \vect{\nabla}\times \vect{A},\\
+  E^2 = \dot{\vect{A}}^2 + (\vect{\nabla}A_0)^2 + 2\dot{\vect{A}}\cdot\vect{\nabla}A_0,\\
+  B^2 = \underbrace{\varepsilon_{ija}\varepsilon_{kla}}_{\delta_{ik}\delta_{jl}-\delta_{il}\delta_{jk}}
+        (\nabla_iA_j)(\nabla_k A_l)
+      = (\nabla_iA_j)(\nabla_i A_j)
+        -
+        (\nabla_iA_j)(\nabla_j A_i)
+\end{gather*}
+
+As a check, the stress-energy tensor is
+\begin{gather*}
+  \theta^{\mu}_{\nu} = \pdiff{\mathcal{L}}{(\partial_{\mu}A_{\alpha})}\partial_{\nu}A_{\alpha} -
+  \delta^{\mu}_{\nu}\mathcal{L}\\
+  =
+  -(\partial^{\mu} A^{\alpha})(\partial_{\nu}A_{\alpha})
+  +
+  (\partial^{\alpha} A^{\mu})(\partial_{\nu}A_{\alpha})
+  +
+  \frac{\delta^{\mu}_{\nu}}{2}
+  \Bigl(
+   (\partial_{\alpha} A_{\beta})(\partial^{\alpha} A^{\beta})
+    -
+    (\partial_{\alpha} A_\beta)(\partial^{\beta} A^{\alpha})
+  \Bigr).
+\end{gather*}
+The Hamiltonian density is
+\begin{gather*}
+  \mathcal{H} = \theta^{0}_{0} 
+  =
+  -(\partial^{0} A^{\alpha})(\partial_{0}A_{\alpha})
+  +
+  (\partial^{\alpha} A^{0})(\partial_{0}A_{\alpha})
+  +
+  \frac{1}{2}
+  \Bigl(
+   (\partial_{\alpha} A_{\beta})(\partial^{\alpha} A^{\beta})
+    -
+    (\partial_{\alpha} A_\beta)(\partial^{\beta} A^{\alpha})
+  \Bigr)\\
+  =
+  \tfrac{1}{2}
+  \Bigl(
+   \dot{\vect{A}}^2 - (\vect{\nabla}A_{0})^2 
+   +(\nabla_{i} A^{j})(\nabla_{i} A^{j})
+   -(\nabla_{i} A^{j})(\nabla_{j} A^{i})
+  \Bigr).
+\end{gather*}
+
+According to Marggiore, we can add to this a total derivative to get an "improved"
+energy-momentum tensor that is gauge invariant:
+\begin{gather*}
+  T^{\mu}_{\nu} = \theta^{\mu}_{\nu} + \partial_{\rho}(F^{\mu \rho}A_{\nu}).
+\end{gather*}
+This adds the following piece to $\mathcal{H}$:
+\begin{gather*}
+  \partial_{\rho}\Bigl((\partial_0A^{\rho} - \partial^{\rho}A^{0})A_{0}\Bigr)
+  =
+  (\dot{\vect{A}} + \vect{\nabla}A_{0})\cdot\vect{\nabla}A_{0}
+  +
+  (\partial_{\rho}\dot{A}^{\rho} - \partial^2A_0)A_{0}\\
+  =
+  (\dot{\vect{A}} + \vect{\nabla}A_{0})\cdot\vect{\nabla}A_{0}
+  +
+  A_{0}(\vect{\nabla}\cdot\dot{\vect{A}} + \nabla^2 A_0)
+  =
+  (\dot{\vect{A}} + \vect{\nabla}A_{0})\cdot\vect{\nabla}A_{0}
+  -\dot{\vect{A}}\cdot\vect{\nabla}A_{0} - (\vect{\nabla}A_0)^2
+\end{gather*}
+This gives:
+\begin{gather*}
+  \mathcal{H} = T^{0}_{0}
+  =
+  \tfrac{1}{2}
+  \Bigl(
+   \dot{\vect{A}}^2 +
+   (\vect{\nabla}A_{0})^2 
+   + 2\dot{\vect{A}}\cdot\vect{\nabla}A_{0} 
+   + 2(\partial_{\rho}\dot{A}^{\rho} - \partial^2A_0)A_{0}
+   +(\nabla_{i} A^{j})(\nabla_{i} A^{j})
+   -(\nabla_{i} A^{j})(\nabla_{j} A^{i})
+  \Bigr).
+\end{gather*}
+
+::::
+ 
 
 ## Rotations
 :::{margin}
@@ -144,7 +558,7 @@ For example, a rotation about the $z$ axis has the form:
     \underbrace{
     \begin{pmatrix}
       0 & -1 & 0\\
-      1 & 0 & 0\\
+      1\theta & 0 & 0\\
       0 & 0 & 0
     \end{pmatrix}
   }_{\mat{L}_x/\I}
@@ -252,7 +666,7 @@ anti-symmetry $f_{abc} = -f_{bac}$ implied by the commutator, we can rearrange t
 This proves that the [adjoint representation][] satisfies the algebra.
 ::::
 
-```{code-cell}
+```{code-cell} ipython3
 :tags: [hide-cell]
 
 from scipy.linalg import expm
@@ -336,7 +750,8 @@ I.e. find a matrix $\mat{S}$ such that
 \end{gather*}
 This is the 2-dimensional [Levi-Civita symbol][].
 :::
-```{code-cell}
+
+```{code-cell} ipython3
 :tags: [hide-input]
 
 σ = np.array([
@@ -366,125 +781,6 @@ form a basis for Hermitian matrices:
 
 
 Exponentiating the $2$ and $\bar{2}$ representations, we 
-:::{admonition} To Do
-
-This is incomplete.
-
-:::
-
-### Gamma Matrices
-
-Suppose we have some wavefunction $\psi(\vect{x})$ that transforms under rotations as
-follows:
-
-\begin{gather*}
-  \mathcal{R} \psi(\vect{x}) = 
-  \mat{R} \psi(\mat{\Lambda}^{-1}\vect{x})
-\end{gather*}
-where $\mat{R}$ is some representation and $\mat{\Lambda}$ is the adjoint
-representation so that derivatives transform as
-\begin{gather*}
-  \mathcal{R} \nabla_{a}\psi(\vect{x}) 
-  = \Lambda_{ab}\nabla_{b}\mat{R}\psi(\mat{\Lambda}^{-1}\vect{x}).
-\end{gather*}
-From now on, we will suppress the arguments and just write:
-\begin{gather*}
-  \psi \rightarrow \mat{R}\psi, \qquad
-  \nabla_{a}\psi \rightarrow \Lambda_{ab}\nabla_{b}\mat{R}\psi.
-\end{gather*}
-If $\mat{R}$ is unitary, then we the following is invariant:
-\begin{gather*}
-  \psi^\dagger\psi \rightarrow \psi^\dagger\underbrace{\mat{R}^\dagger\mat{R}}_{\mat{1}}\psi = 
-  \psi^\dagger\psi.
-\end{gather*}
-Can we do something similar with the derivative?  One obvious possibility is
-\begin{align*}
-  (\nabla_{a}\psi)^\dagger (\nabla_{a}\psi)
-  &\rightarrow 
-  (\Lambda_{ab}\nabla_{b}\psi)^\dagger \underbrace{\mat{R}^\dagger\mat{R}}_{\mat{1}}
-  (\Lambda_{ac}\nabla_{c}\psi)\\
-  &=
-  [\underbrace{\mat{\Lambda}^\dagger\mat{\Lambda}}_{\mat{1}}]_{bc}(\nabla_{b}\psi)^\dagger(\nabla_{c}\psi)\\
-  &=
-  (\nabla_{a}\psi)^\dagger (\nabla_{a}\psi).
-\end{align*}
-Another possibility can be formed from a single derivative if we can find a set of
-matrices $\mat{\gamma}_{a}$ such that
-\begin{gather*}
-  \mat{\gamma}_{a}\mat{R}\Lambda_{ab} = \mat{R}\mat{\gamma}_{b}
-\end{gather*}
-This allows us to define
-\begin{align*}
-  % https://github.com/mathjax/MathJax/issues/2107#issuecomment-453320217
-  \def\fslash#1{\mat{\mathord{\smash{\mathop{#1\strut}\limits^{\smash{\textstyle\lower10pt{\unicode{x2215}}}}}\strut}}}
-  \fslash{\nabla} &= \mat{\gamma}_{a}\nabla_{a},\\
-  \fslash{\nabla}\psi &\rightarrow 
-  \mat{\gamma}_{a}\Lambda_{ab}\nabla_{b}\mat{R}\psi
-  =
-  \mat{R}\mat{\gamma}_{b}\nabla_{b}\psi = 
-  \mat{R}\mat{\gamma}_{b}\nabla_{b}\psi \\
-  &= \mat{R}\fslash{\nabla}\psi,
-\end{align*}
-from which we can thus form the invariant
-\begin{gather*}
-  \psi^\dagger \fslash{\nabla}\psi \rightarrow \psi^\dagger \fslash{\nabla}\psi.
-\end{gather*}
-Expanding the required transformation property to linear order:
-\begin{gather*}
-  \mat{R} = e^{\vect{\theta}\cdot\vect{\mat{L}}/\I} 
-  \approx
-  \mat{1} - \I\theta_{a}\mat{L}_{a}, \qquad
-  \mat{\Lambda} = e^{\vect{\theta}\cdot\vect{\mat{\lambda}}/\I}
-  \approx
-  \mat{1} - \I\theta_{a}\mat{\lambda}_{a},
-\end{gather*}
-we have
-\begin{gather*}
-  \mat{\gamma}_{a}\mat{R}\Lambda_{ab} = \mat{R}\mat{\gamma}_{b}\\
-  \mat{\gamma}_{a}(\mat{1} - \I\theta_c \mat{L}_c)(\delta_{ab} - \I \theta_{c}[\mat{\lambda}_c]_{ab}) \approx (\mat{1} - \I\theta_c \mat{L}_c)\mat{\gamma}_{b},\\
-  -\I\theta_c\Bigl(
-    [\mat{\gamma}_{b},\mat{L}_c]
-    +
-    \mat{\gamma}_{a}[\mat{\lambda}_c]_{ab}
-  \Bigr) = 0.
-\end{gather*}
-Recall that the generators satisfy
-\begin{gather*}
-  [\mat{L}_{a}, \mat{L}_{b}] = \I f_{abc}\mat{L}_{c}, \qquad
-  [\mat{\lambda}_{a}, \mat{\lambda}_{b}] = \I f_{abc}\mat{\lambda}_{c}.
-\end{gather*}
-Hence, if we express the $\mat{\gamma}_{a}$ matrices in term of the algebra generators, then
-we have
-\begin{gather*}
-  \mat{\gamma}_{b} = \mat{L}_{a}c_{ab},\\
-  [\mat{\gamma}_{b},\mat{L}_c]
-  +
-  \mat{\gamma}_{a}[\mat{\lambda}_c]_{ab}
-  = c_{ab}[\mat{L}_{a},\mat{L}_c]
-  +
-  c_{da}\mat{L}_{d}[\mat{\lambda}_c]_{ab} = 0,\\
-  c_{ab}\I f_{acd}
-  +
-  \underbrace{c_{da}[\mat{\lambda}_c]_{ab}}_{[\mat{c}\mat{\lambda}_c]_{db}} = 0.
-\end{gather*}
-If $\mat{c}$ is invertable, this is very close to the definition of the adjoint representation:
-\begin{gather*}
-  [\mat{l}_{c}]_{da} = -\I f_{cda},\\
-  [\mat{c}\mat{\lambda}_c\mat{c}^{-1}]_{da} = - \I f_{acd} = \I f_{cad}
-  = -[\mat{l}_{c}]_{ad}\\
-  \mat{c}\mat{\lambda}_c = -\mat{l}_c^T\mat{c}.
-\end{gather*}
-However, we know this is not necessary, since, for the Lorentz group, there are
-4-dimensional matrices $\mat{\gamma}^{\mu}$ that do the trick, when the adjoint
-representation is 6-dimensional.
-
-
-
-
-
-
-
-
 
 # Lorentz Group
 
@@ -601,108 +897,6 @@ $\vect{\mat{K}} = \pm \vect{\mat{\sigma}}/2\I$:
 
 
 
-
-## Covariant Formulation
-
-To formulate things covariantly, we define the following four-vectors (now choosing
-units such that $c = \hbar = 1$):
-\begin{gather*}
-  A^{\mu} = (A^0, \vect{A}), \qquad x^{\mu} = (t, \vect{x}), \qquad
-  p^{\mu} (E, \vect{p}).
-\end{gather*}
-Note that the contravariant four-vectors, with a raised index, have the corresponding
-physical quantities.  We now introduce the metric
-\begin{gather*}
-  g_{\mu\nu} = g^{\mu\nu} = \diag(1, -1, -1, -1).
-\end{gather*}
-We follow the conventions in {cite:p}`Langacker:2017`:
-
-:::{figure} _images/LangackerTable1.2.png
-:name: tab:LangackerTable1.2
-
-Table 1.2 from {cite:p}`Langacker:2017`.  Note how the metric $g_{\mu\nu}$ is used to
-raise and lower indices, changing the sign of the spatial part in the process.
-:::
-
-Using these expressions, we can express the Lorentz transform more covariantly by
-packaging the angles and rapidities into 4×4 tensor $\omega_{\rho \sigma}$:
-\begin{gather*}
-  \theta^{i} = \tfrac{1}{2}\varepsilon^{ijk} \omega_{jk}, \qquad
-  \eta^{i} = \omega^{0i},\\
-  \omega_{\mu\nu} = \begin{pmatrix}
-    0 & \vect{\eta}\\
-    \vect{\eta}^T & \vect{\theta}\cdot\vect{\mat{T}}
-  \end{pmatrix}
-  = \begin{pmatrix}
-    0 & \eta_x & \eta_y & \eta_z\\
-    \eta_x & 0 & \theta_z & -\theta_y\\
-    \eta_y & -\theta_z & 0 & \theta_x\\
-    \eta_z & \theta_y & -\theta_x & 0\\
-  \end{pmatrix}.
-\end{gather*}
-We similarly package the matrices $\vect{\mat{J}}$ and $\vect{\mat{K}}$ into a 4×4 of
-matrices $\mat{M}_{\rho\sigma}$:
-\begin{gather*}
-  \mat{J}^{i} = \tfrac{1}{2}\varepsilon^{ijk}\mat{M}_{jk}, \qquad
-  \mat{K}^{i} = \mat{M}^{0i}, \\
-  \tfrac{1}{2}\omega^{\rho\sigma}\mat{M}_{\rho\sigma} 
-  = \vect{\theta}\cdot\vect{\mat{J}} + \vect{\eta}\cdot\vect{\mat{K}}.
-\end{gather*}
-Including the generators of translations $\mat{P}_{\mu}$ we have the full Poincaré
-group, which has the algebra
-\begin{gather*}
-  [\mat{P}_{\mu}, \mat{P}_{\nu}] = 0, \qquad
-  [\mat{M}_{\mu\nu}, \mat{P}_{\rho}] 
-  = -\I(g_{\mu\rho}\mat{P}_{\nu} - g_{\nu\sigma}\mat{P}_{\rho}),\\
-  [\mat{M}_{\mu\nu}, \mat{M}_{\rho\sigma}] =  
-  \I(g_{\nu\rho}\mat{M}_{\mu\sigma} - g_{\nu\sigma}\mat{M}_{\mu\rho} 
-  - g_{\mu\rho}\mat{M}_{\nu\sigma} + g_{\mu\sigma}\mat{M}_{\nu\rho}).
-\end{gather*}
-
-
-
-
-
-
-
-```{code-cell}
-
-#:tags: [hide-cell]
-J = np.zeros((3, 4, 4), dtype=complex)
-J[:, 1:, 1:] = L
-K = np.zeros((3, 4, 4), dtype=complex)
-for i in [0, 1, 2]:
-    K[i, 0, i+1] = K[i, i+1, 0] = 1j
-Jx, Jy, Jz = J
-Kx, Ky, Kz = K
-
-eta = 0.1
-c, s = np.cosh(eta), np.sinh(eta)
-assert np.allclose(
-    expm(eta*K[0]/1j),
-    np.array([
-        [c, s, 0, 0],
-        [s, c, 0, 0],
-        [0, 0, 1, 0],
-        [0, 0, 0, 1]]))
-
-def com_(A, B):
-    """Return the full set of commutators."""
-    return (np.einsum('iab,jbc->ijac', A, B) 
-            - np.einsum('ibc,jab->ijac', A, B))
-
-def eps_(A):
-    """Return eps_{ijk}A_k."""
-    return np.einsum('ijk,kab->ijab', eps, A)
-    
-assert np.allclose(com_(J, J), 1j*eps_(J))
-assert np.allclose(com_(K, J), 1j*eps_(K))
-assert np.allclose(com_(K, K), -1j*eps_(J))
-```
-
-
-
-
 [moments]: <https://en.wikipedia.org/wiki/Moment_(physics)>
 [Levi-Civita symbol]: <https://en.wikipedia.org/wiki/Levi-Civita_symbol>
 [structure constants]: <https://en.wikipedia.org/wiki/Structure_constants>
@@ -712,6 +906,3 @@ assert np.allclose(com_(K, K), -1j*eps_(J))
 [trivial representation]: <https://en.wikipedia.org/wiki/Trivial_representation>
 [Lie algebra]: <https://en.wikipedia.org/wiki/Lie_algebra>
 [angular momentum]: <https://en.wikipedia.org/wiki/Angular_momentum>
-[Rapidity]: <https://en.wikipedia.org/wiki/Rapidity>
-
-
