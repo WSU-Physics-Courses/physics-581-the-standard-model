@@ -110,7 +110,7 @@ independent terms since the first is also a total derivative, and the second two
 equivalent after integrating by parts.
 
 :::{margin}
-Here we follow the argument given in {cite:p}`tHooft:2016` §4, but with our metric conventions.
+Here we follow the argument given in {cite:p}`t-Hooft:2016` §4, but with our metric conventions.
 :::
 Thus, to this lowest order, we have the following Lagrangian density:
 \begin{gather*}

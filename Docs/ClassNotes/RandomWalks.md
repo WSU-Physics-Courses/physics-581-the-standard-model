@@ -12,7 +12,7 @@ kernelspec:
   name: phys-581
 ---
 
-```{code-cell} ipython3
+```{code-cell}
 :tags: [hide-cell]
 
 import mmf_setup;mmf_setup.nbinit()
@@ -40,7 +40,7 @@ with "spherical" symmetry:
 
 Here we demonstrate numerically in $d=2$ dimensions with $\sigma=1$:
 
-```{code-cell} ipython3
+```{code-cell}
 :tags: [hide-input]
 
 rng = np.random.default_rng(seed=2)
@@ -222,7 +222,7 @@ better?)*
 ::::
 :::::
 
-```{code-cell} ipython3
+```{code-cell}
 # Define a random number generator with a seed so the results are reproducible
 from scipy.special import gamma
 rng = np.random.default_rng(seed=2)
@@ -242,7 +242,7 @@ ax.grid('on')
 ax.legend(loc="upper left");
 ```
 
-```{code-cell} ipython3
+```{code-cell}
 :tags: [hide-cell]
 
 from myst_nb import glue
@@ -321,7 +321,7 @@ then try to adjust the units so that the random walk wanders the same distance a
 the starting point.  The following figure shows that the scaling we specified above
 $\lambda = 1/\sqrt{N}$ works.
 
-```{code-cell} ipython3
+```{code-cell}
 :tags: [hide-input]
 
 from matplotlib.patches import Rectangle
@@ -577,7 +577,7 @@ in the theory.**  Here we demonstrate what would have happened if we applied the
 previous RG analysis to a biased random walk, again with $\sigma = 1$ but now with a
 small bias to the upper right of $\vect{\mu} = (0.05, 0.05)$.
 
-```{code-cell} ipython3
+```{code-cell}
 :tags: [hide-input]
 
 from matplotlib.patches import Rectangle
@@ -661,7 +661,7 @@ theories tend to flow towards simpler theories.
 
 Now consider the flow in this plane (coarse graining with steps of $N=2$):
 
-```{code-cell} ipython3
+```{code-cell}
 :tags: [hide-input]
 
 c = np.linspace(-1, 1)
@@ -696,8 +696,9 @@ scale, so these can all be considered the same fixed-point.
 The left plot shows a slice through the attractive $(C_1, C_2)$ plane.  Here we see a
 line of fixed points at $C_1=0$: if we start with parity, then we will remain on this
 line.  However, if we start with even a small $C_1$, then eventually the flow will
-diverge to the *second fixed point* at $C_2 \rightarrow \infty$, which we identified
-above as a different universality class with $\nu = 1$.
+diverge to the *second fixed point* at $C_1 \rightarrow \infty$, which we identified
+above as a different universality class with $\nu = 1$.  *(The parameter $C_2$ here is
+marginal, and the behavior is quite boring.)*
 
 The right plot shows a slice through the $(C_1, C_3)$ plane (ignoring the "boring"
 marginal parameter $C_2$).  Here we see quite typical RG flow: the irrelevant parameter
@@ -732,7 +733,7 @@ print(res.x)
 #C1, C2, C3, a
 ```
 
-```{code-cell} ipython3
+```{code-cell}
 %matplotlib inline
 from ipywidgets import interact, widgets
 import numpy as np, matplotlib.pyplot as plt
@@ -832,13 +833,14 @@ def draw_interactive(n=0, loc=0):
     #get_frame(13,ax)
 ```
 
-```{code-cell} ipython3
+```{code-cell}
 ax.set_xlim(0,10)
 out
 ```
 
-```
-:tags: [hide]
+```{code-cell}
+:tags: [hide-cell]
+
 
 from matplotlib.animation import FuncAnimation
 from IPython.display import HTML
@@ -863,7 +865,7 @@ class CobWeb:
     def init(self):
         return self.cobweb(r=1.0)
 
-    def cobweb(self, r):
+    def cobweb(self, r, f=lambda x, r: r*x*(1-x)):
         """Draw a cobweb diagram.
 
         Arguments
@@ -996,7 +998,7 @@ Although qualitatively different, this also belongs to a universality class with
 1$. **(Check this.)**
 :::
 
-```{code-cell} ipython3
+```{code-cell}
 # Cauchy random walk
 rng = np.random.default_rng(seed=2)
 N = 2**20

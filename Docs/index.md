@@ -40,10 +40,10 @@ titlesonly:
 hidden:
 ---
 Syllabus
-Assignments
 
 References
 ```
+
 ```{toctree}
 ---
 maxdepth: 2
@@ -55,6 +55,16 @@ glob:
 Prerequisites/*
 ```
 
+```{toctree}
+---
+maxdepth: 2
+caption: "Class Notes:"
+titlesonly:
+hidden:
+glob:
+---
+ClassNotes/*
+```
 
 ```{toctree}
 ---

@@ -1,0 +1,179 @@
+[project]
+
+name = "phys-581-the-standard-model-of-particle-physics"
+
+version = "0.1"
+description = "WSU Course Physics 581: The Standard Model of Particle Physics taught Fall 2023"
+
+license = {text = "BSD-3-Clause"}
+authors = [
+  {name = "Michael McNeil Forbes", email = "m.forbes+581@wsu.edu"},
+]
+
+readme = "README.md"
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Utilities",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+]
+
+######################################################################
+# Dependencies
+
+requires-python = '>=3.9'
+dependencies = [
+    'scipy>=1.7.1',
+    'matplotlib>=3.4.3',
+    'mmf-setup>=0.4.11',
+    'uncertainties>=3.1.5',
+]
+
+# Optional dependencies for testing, building the docs, etc.
+[project.optional-dependencies]
+test = [
+    'pytest>=7.0.1',
+    'coverage[toml]; python_version < "3.7"', 
+    'coverage[toml]>=7.2.2; python_version >= "3.7"', 
+    'pytest-html',
+    'pytest-xdist',
+    'psutil',
+    'phys-581-the-standard-model-of-particle-physics[full]',
+]
+docs = [
+    'sphinx>=5.3.0',
+    'mock',
+    'nbsphinx>=0.8.8',
+    'pycallgraph>=1.0.1',
+    'sphinxcontrib-zopeext>=0.3.3',
+    'ipython >= 7.16.3; python_version < "3.7"',
+    'ipython >= 7.23.1; python_version >= "3.7"',
+    'mmf-setup>=0.4.11',
+    'sphinx-panels>=0.6.0',
+    'sphinx-book-theme>=0.1.9',
+    'sphinxcontrib-zopeext>=0.2.4',
+    'sphinxcontrib-bibtex>=2.3.0',
+    'myst-nb>=0.12.3',
+    'sphinxcontrib.zopeext',
+    'nbconvert',
+]
+full = [
+    'scipy >= 1.5.4; python_version < "3.7"',
+    'scipy >= 1.7.3; python_version < "3.10" and python_version >= "3.7"',
+    'scipy >= 1.10.1; python_version >= "3.10"',
+    # This version of numpy has universal wheels
+    'numpy>=1.21.0; python_version >= "3.8"',
+]
+all = [
+    'phys-581-the-standard-model-of-particle-physics[full,test,docs]',
+]
+
+
+[project.urls]
+Documentation = 'https://physics-581-the-standard-model.readthedocs.io/en/latest'
+Issues = 'https://gitlab.com/wsu-courses/physics-581-the-standard-model/issues'
+GitLab = 'https://gitlab.com/wsu-courses/physics-581-the-standard-model'
+'GitHub Mirror' = 'https://github.com/WSU-Physics-Courses/physics-581-the-standard-model'
+
+
+[tool.pdm]
+[tool.pdm.dev-dependencies]
+tools = [
+      'black>21.4b2',
+      'mercurial>=5.7.1',
+      'hg-git>=0.10.0',
+      'hg-evolve>=10.3.1',
+]
+
+
+[build-system]
+
+requires = ["setuptools", "wheel"] # PEP 508 specifications.
+######################################################################
+# MMF-Setup
+# The following allows you to add this ROOT directory to your path so you
+# can import packages with the following:
+#
+#     import mmf_setup
+#     mmf_setup.set_path()
+
+[tool.mmf_setup]
+ROOT = 'src'
+
+######################################################################
+# PyTest
+[tool.pytest.ini_options]
+testpaths = [
+    "src/phys_581",
+    "tests",
+]
+markers = [
+    # mark test as a benchmark.  (Might be slow, or platform dependent)
+    "bench",
+    # mark test as slow.
+    "slow",
+]
+addopts = [
+    "-m not bench",
+
+    "-k not test_official_assignment",
+"--doctest-modules",
+    #"--cov",
+    #"--cov-report=html",
+    #"--cov-report=xml",
+    #"--cov-fail-under=85",
+    #"--no-cov-on-fail",
+    #"--html=_artifacts/pytest_report.html",
+    #"--junitxml=_artifacts/junit.xml",
+    #"-x",
+    #"--pdb",
+    #"--flake8",  # Disable until https://github.com/tholo/pytest-flake8/issues/8
+]
+
+doctest_optionflags = [
+    "ELLIPSIS",
+    "NORMALIZE_WHITESPACE",
+    "IGNORE_EXCEPTION_DETAIL",
+    ]
+
+######################################################################
+# Coverage
+[tool.coverage.run]
+# https://github.com/marketplace/actions/coveralls-python#coveragepy-configuration
+branch = true
+relative_files = true
+parallel = true
+omit = []
+source = [ "phys_581" ]
+
+[tool.coverage.paths]
+source = ["src", "**/site-packages"]
+
+[tool.coverage.html]
+directory = "build/_coverage"
+
+[tool.coverage.xml]
+directory = "build/_coverage"
+
+[tool.coverage.report]
+fail_under = 96
+
+######################################################################
+# Black
+[tool.black]
+exclude = '''
+    /(
+        \.git
+      | \.hg
+      | \.nox
+      | \.venv
+      | _build
+      | build
+      | dist
+    )/
+'''
