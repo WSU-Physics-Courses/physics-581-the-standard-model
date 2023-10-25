@@ -10,6 +10,7 @@
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
+from pathlib import Path
 import os.path
 import subprocess
 from sphinx.util.fileutil import copy_asset
@@ -20,6 +21,10 @@ mmf_setup.set_path()
 
 # import sys
 # sys.path.insert(0, os.path.abspath('.'))
+
+# https://discourse.jupyter.org/t/debugger-warning-it-seems-that-frozen-modules-are-being-used-python-3-11-0/
+# https://stackoverflow.com/questions/76003473
+os.environ["PYDEVD_DISABLE_FILE_VALIDATION"] = "1"
 
 
 # This is True if we are building on Read the Docs in case we need to customize.
@@ -171,6 +176,10 @@ napoleon_use_rtype = True
 ######################################################################
 # Open Graph settings for the sphinxext.opengraph extension
 ogp_site_url = "https://physics-581-the-standard-model.readthedocs.io/en/latest"
+if html_logo.endswith(".svg"):
+    # SVG not supported.  Make sure you also provide a .png version
+    # https://sphinxext-opengraph.readthedocs.io/en/latest/socialcards.html
+    ogp_social_cards = {"image": html_logo[:-4] + ".png"}
 ######################################################################
 # Variables with course information
 course_package = "phys_581"
@@ -336,7 +345,8 @@ def my_init(app):
         mathjax_offline = False
     else:
         print("Not On RTD!")
-        subprocess.check_call(["make", "init"])
+        ROOT = str(Path(__file__).parent.parent)
+        subprocess.check_call(["make", "-C", ROOT, "init"])
 
     if mathjax_offline:
         # For this to work, you need to put mathjax js files in Docs/_static/mathjax
