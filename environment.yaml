@@ -40,8 +40,11 @@ dependencies:
     - sphinx-comments # Hypothes.is comments and annotations
     - sphinxcontrib-bibtex>=2.4.0
     # https://github.com/executablebooks/sphinx-jupyterbook-latex/issues/97
-    - sphinx-jupyterbook-latex    
+    - sphinx-jupyterbook-latex
 
+    - ipywidgets
+    - black
+    
     - sphobjinv  # Helps looking up intersphinx references
     - mmf-setup
     - ruamel-yaml

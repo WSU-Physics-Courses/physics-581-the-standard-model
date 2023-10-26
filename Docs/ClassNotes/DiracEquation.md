@@ -24,6 +24,64 @@ import numpy as np, matplotlib.pyplot as plt
 (sec:DiracEq)=
 # Dirac Equation
 
+## The Essence
+
+Physical objects must transform under specific representations of the Lorentz group.
+Here we consider four-vectors like $x^{\mu} = (ct, \vect{x})^T$ and spinors $\psi_a$,
+each of which transforms under specific, but different, representations:
+\begin{gather*}
+  x^{\mu} \rightarrow \Lambda^{\mu}{}_{\nu}x^{\nu}, \qquad
+  x_{\mu} \rightarrow \Lambda_{\mu}{}^{\nu}x_{\nu}, \qquad
+  \psi_a \rightarrow R_{ab}\psi_b,
+\end{gather*}
+where $\mat{\Lambda}(\omega)$ and $\mat{R}(\omega)$ are matrix representations of the
+Lorentz group corresponding to the same boosts and rotation parameters $\omega$.
+
+:::{margin}
+Though not obvious a-priori, it turns out that the matrix $\mat{\gamma}^{0}$ needed here
+is the same as the time-like matrix of $\mat{\gamma}^{\mu}$ below.
+:::
+The [Dirac equation][] follows from constructing a Lorentz invariant Lagrangian.
+Without derivatives, we can form the following term
+\begin{gather*}
+  \bar{\psi}\psi, \qquad \bar{\psi} = \psi^{\dagger}\mat{\gamma}^0, \qquad
+  \mat{R}^{\dagger}\mat{\gamma}^0\mat{R} = \mat{1},
+\end{gather*}
+where the matrix $\mat{\gamma}^0$ is needed since the representation $\mat{R}$ is not
+unitary.
+
+The Lorentz transform also passively changes the arguments, so four-gradients also
+transform
+\begin{gather*}
+  \partial_{\mu}\phi \rightarrow 
+  \Lambda_{\mu}{}^{\nu}\partial_{\nu}\phi.
+\end{gather*}
+For scalars, we can thus form Lorentz invariant terms with two derivatives, which form
+the basis for the [Klein-Gordon equation][] 
+\begin{gather*}
+  \mathcal{L} = \frac{1}{2}(\partial_{\mu}\phi\partial^{\mu}\phi - m^2\phi^2), \qquad
+  (\partial_{\mu}\partial^{\mu} + m^2)\phi = 0.
+\end{gather*}
+The additional transformation property of spinors $\psi \rightarrow \mat{R}\psi$
+provides another option if we can find matrices $\mat{\gamma}^{\mu}$ such that
+\begin{gather*}
+  \mat{\gamma}^{\mu}\mat{R}\Lambda_{\mu}{}^{\nu} = \mat{R}\mat{\gamma}^{\nu}.
+\end{gather*}
+This allows us to construct a special derivative that preserves the transformation
+properties of spinors:
+\begin{gather*}
+  % https://github.com/mathjax/MathJax/issues/2107#issuecomment-453320217
+  \def\fslash#1{\mathord{\smash{\mathop{\mat{#1}\strut}\limits^{\smash{\textstyle\lower10pt{\unicode{x2215}}}}}\strut}}
+  \fslash{\partial} = \mat{\gamma}^{\mu}\partial_{\mu},\qquad
+  \fslash{\partial}\psi \rightarrow \mat{R}\,\fslash{\partial}\psi.
+\end{gather*}
+This allows us to form a Lorentz invariant Lagrangian with a single derivative that
+forms the basis for the [Dirac equation][]:
+\begin{gather*}
+  \mathcal{L} = \bar{\psi}\I\fslash{\partial}\psi - m\bar{\psi}\psi, \qquad
+   (\I\fslash{\partial} - m)\psi = 0.
+\end{gather*}
+
 ## Rotations
 :::{margin}
 Here $\varepsilon_{ijk}$ is the [Levi-Civita symbol][] which effects the cross product:
@@ -31,8 +89,8 @@ Here $\varepsilon_{ijk}$ is the [Levi-Civita symbol][] which effects the cross p
   [\vect{\theta}\times\vect{B}]_i = \varepsilon_{iaj}\theta_aB_j = [\mat{\vect{\theta}\times}]_{ij}B_j.
 \end{gather*}
 :::
-We start with some group theory.  Active rotations about the axis $\vect{\theta}$ of
-magnitude $\theta = \abs{\theta}$ in 3D can be effected by the following linear
+We start with some group theory for rotations.  Active rotations about the axis
+$\vect{\theta}$ of magnitude $\theta = \abs{\theta}$ in 3D can be effected by the following linear
 transformations, which form a faithful representation of the SO(3) group:
 \begin{gather*}
   \mat{R}_{\vect{\theta}} = e^{\mat{\vect{\theta}\times}}, \qquad
@@ -171,7 +229,7 @@ relativistic metric.
 :::{admonition} Convention in Mathematics
 In terms of the anti-symmetric matrices $\mat{T}_{a}$, we have
 \begin{gather*}
-  [\mat{T}_{a}, \mat{T}_{b}] = c_{ab}^{}{c} \mat{T}_{c}.
+  [\mat{T}_{a}, \mat{T}_{b}] = c_{ab}{}^{c} \mat{T}_{c}.
 \end{gather*}
 For rotations in 3D, this notation make sense.
 
@@ -372,17 +430,16 @@ This is incomplete.
 
 :::
 
-### Gamma Matrices
+### Gamma Matrices I
 
 Suppose we have some wavefunction $\psi(\vect{x})$ that transforms under rotations as
 follows:
-
 \begin{gather*}
   \mathcal{R} \psi(\vect{x}) = 
   \mat{R} \psi(\mat{\Lambda}^{-1}\vect{x})
 \end{gather*}
-where $\mat{R}$ is some representation and $\mat{\Lambda}$ is the adjoint
-representation so that derivatives transform as
+where $\mat{R}$ is some spinor representation (think $SU(2)$) and $\mat{\Lambda}$ is the adjoint
+representation ($SO(3)$) so that derivatives transform as
 \begin{gather*}
   \mathcal{R} \nabla_{a}\psi(\vect{x}) 
   = \Lambda_{ab}\nabla_{b}\mat{R}\psi(\mat{\Lambda}^{-1}\vect{x}).
@@ -413,42 +470,41 @@ matrices $\mat{\gamma}_{a}$ such that
 \begin{gather*}
   \mat{\gamma}_{a}\mat{R}\Lambda_{ab} = \mat{R}\mat{\gamma}_{b}
 \end{gather*}
-This allows us to define
-\begin{align*}
-  % https://github.com/mathjax/MathJax/issues/2107#issuecomment-453320217
-  \def\fslash#1{\mat{\mathord{\smash{\mathop{#1\strut}\limits^{\smash{\textstyle\lower10pt{\unicode{x2215}}}}}\strut}}}
-  \fslash{\nabla} &= \mat{\gamma}_{a}\nabla_{a},\\
-  \fslash{\nabla}\psi &\rightarrow 
+This allows us to define $\fslash{\nabla} = \mat{\gamma}_{a}\nabla_{a}$ such that
+$\fslash{\nabla}\psi \rightarrow \mat{R}\fslash{\nabla}\psi$ transforms covariantly with
+$\mat{R}$:
+\begin{gather*}
+  \fslash{\nabla}\psi \rightarrow 
   \mat{\gamma}_{a}\Lambda_{ab}\nabla_{b}\mat{R}\psi
-  =
-  \mat{R}\mat{\gamma}_{b}\nabla_{b}\psi = 
-  \mat{R}\mat{\gamma}_{b}\nabla_{b}\psi \\
-  &= \mat{R}\fslash{\nabla}\psi,
-\end{align*}
-from which we can thus form the invariant
+  = \mat{R}\mat{\gamma}_{b}\nabla_{b}\psi 
+  = \mat{R}\fslash{\nabla}\psi.
+\end{gather*}
+This allows us to form the invariant
 \begin{gather*}
   \psi^\dagger \fslash{\nabla}\psi \rightarrow \psi^\dagger \fslash{\nabla}\psi.
 \end{gather*}
-Expanding the required transformation property to linear order:
+
+To find the matrices $\mat{\gamma}_{a}$ we expanding the required transformation
+property to linear order:
 \begin{gather*}
   \mat{R} = e^{\vect{\theta}\cdot\vect{\mat{L}}/\I} 
   \approx
   \mat{1} - \I\theta_{a}\mat{L}_{a}, \qquad
   \mat{\Lambda} = e^{\vect{\theta}\cdot\vect{\mat{\lambda}}/\I}
   \approx
-  \mat{1} - \I\theta_{a}\mat{\lambda}_{a},
-\end{gather*}
-we have
-\begin{gather*}
+  \mat{1} - \I\theta_{a}\mat{\lambda}_{a},\\
   \mat{\gamma}_{a}\mat{R}\Lambda_{ab} = \mat{R}\mat{\gamma}_{b}\\
   \mat{\gamma}_{a}(\mat{1} - \I\theta_c \mat{L}_c)(\delta_{ab} - \I \theta_{c}[\mat{\lambda}_c]_{ab}) \approx (\mat{1} - \I\theta_c \mat{L}_c)\mat{\gamma}_{b},\\
   -\I\theta_c\Bigl(
     [\mat{\gamma}_{b},\mat{L}_c]
     +
     \mat{\gamma}_{a}[\mat{\lambda}_c]_{ab}
-  \Bigr) = 0.
+  \Bigr) = 0,\\
+    [\mat{\gamma}_{b},\mat{L}_c]
+    +
+    \mat{\gamma}_{a}[\mat{\lambda}_c]_{ab} = 0
 \end{gather*}
-Recall that the generators satisfy
+Recall that the generators of the algebra satisfy
 \begin{gather*}
   [\mat{L}_{a}, \mat{L}_{b}] = \I f_{abc}\mat{L}_{c}, \qquad
   [\mat{\lambda}_{a}, \mat{\lambda}_{b}] = \I f_{abc}\mat{\lambda}_{c}.
@@ -467,16 +523,20 @@ we have
   +
   \underbrace{c_{da}[\mat{\lambda}_c]_{ab}}_{[\mat{c}\mat{\lambda}_c]_{db}} = 0.
 \end{gather*}
-If $\mat{c}$ is invertable, this is very close to the definition of the adjoint representation:
+To further elucidate the structure here, recall that the alternative form of the adjoint
+representation is $[\mat{l}_{c}]_{da} = -\I f_{acd}$.  Inserting this gives
 \begin{gather*}
-  [\mat{l}_{c}]_{da} = -\I f_{cda},\\
-  [\mat{c}\mat{\lambda}_c\mat{c}^{-1}]_{da} = - \I f_{acd} = \I f_{cad}
-  = -[\mat{l}_{c}]_{ad}\\
-  \mat{c}\mat{\lambda}_c = -\mat{l}_c^T\mat{c}.
+  c_{ab}[\mat{l}_{c}]_{da} = [\mat{l}_{c}\mat{c}]_{db} = [\mat{c}\mat{\lambda}_c]_{db}, \qquad
+  \mat{l}_c \mat{c} = \mat{c}\mat{\lambda}_{c}.
 \end{gather*}
+
+In the case of rotations, $\mat{\lambda}_{c} = \mat{l}_c$ is the adjoint representation,
+so we can just take $\mat{c} = \mat{1}$. 
+
 However, we know this is not necessary, since, for the Lorentz group, there are
 4-dimensional matrices $\mat{\gamma}^{\mu}$ that do the trick, when the adjoint
-representation is 6-dimensional.
+representation $\mat{l}_{c}$ is 6-dimensional.  The matrix $\mat{c}$ in this case must
+be 6×4. 
 
 
 
@@ -602,6 +662,77 @@ $\vect{\mat{K}} = \pm \vect{\mat{\sigma}}/2\I$:
 
 
 
+### Misc.
+
+
+
+
+A scalar wavefunction $\phi(x^{\mu})$ and its four-gradient transform as
+\begin{gather*}
+  \phi(x^{\mu}) \rightarrow 
+  \phi(\underbrace{\Lambda_{\nu}{}^{\mu}}_{\mathclap{[\mat{\Lambda}^{-1}]^{\mu}{}_{\nu}}}x^{\nu}), 
+  \qquad
+  \partial_{\mu}\phi \rightarrow 
+  \Lambda_{\mu}{}^{\nu}\partial_{\nu}\phi.
+\end{gather*}
+For such a scale, the Lorentz invariant term with four-gradients has two derivatives:
+\begin{gather*}
+  \partial_{\mu}\phi\partial^{\mu}\phi.
+\end{gather*}
+
+
+
+
+
+
+
+
+
+
+
+
+
+The four-vector transformation satisfies *(in matrix then index notation)*
+\begin{gather*}
+   \mat{\Lambda}^T\mat{g}\mat{\Lambda} = \mat{g}, \qquad
+   \Lambda^{\nu}{}_{\mu} g_{\nu\rho}\Lambda^{\rho}{}_{\sigma} = g_{\mu\sigma},\\
+   \mat{\Lambda}^{-1} = \mat{g}\mat{\Lambda}^T\mat{g}, \qquad
+   [\mat{\Lambda}^{-1}]^{\sigma}{}_{\rho} 
+   = g^{\sigma\mu}\Lambda^{\nu}{}_{\mu} g_{\nu\rho}
+   = \Lambda_{\rho}{}^{\sigma}, \qquad
+\end{gather*}
+where $g=\diag(1, -1, -1, -1)$ is the metric.  This compactly expressed in Einstein
+notation where the metric is used to raise and lower indices, and Lorentz invariant
+quantities can be formed by contracting indices:
+\begin{gather*}
+  A_{\mu}B^{\mu} = A^{\mu}g_{\mu\nu}B^{\nu} \rightarrow A_{\mu}B^{\mu}.
+\end{gather*}
+
+The wavefunction for an electron has the form $\psi_a(x^{\mu})$, and transforms as
+\begin{gather*}
+  \psi(x^{\mu}) \rightarrow 
+  \mat{R}\psi(\underbrace{\Lambda_{\nu}{}^{\mu}}_{\mat{\Lambda}^{-1}}x^{\nu}).
+\end{gather*}
+The Dirac equation follows from a Lorentz invariant Lagrangian constructed with a single 
+, and the Dirac equation
+follows 
+
+
+
+We start 
+
+
+
+We start from Lorentz transformations which transform four-vectors $x^{\mu} = (t,
+\vect{x})^T$ as $x^{\mu} \rightarrow \Lambda^{\mu}{}_{\nu}x^{\nu}$ where
+$\mat{\Lambda}$ is a real 4-dimensional representation of the Lorentz group.
+
+into 
+The electron wavefunction $\psi_a(\vect{x}, t)$ needs four components 
+
+
+
+
 ## Covariant Formulation
 
 To formulate things covariantly, we define the following four-vectors (now choosing
@@ -713,5 +844,7 @@ assert np.allclose(com_(K, K), -1j*eps_(J))
 [Lie algebra]: <https://en.wikipedia.org/wiki/Lie_algebra>
 [angular momentum]: <https://en.wikipedia.org/wiki/Angular_momentum>
 [Rapidity]: <https://en.wikipedia.org/wiki/Rapidity>
+[Klein-Gordon equation]: <https://en.wikipedia.org/wiki/Klein%E2%80%93Gordon_equation>
+[Dirac equation]: <https://en.wikipedia.org/wiki/Dirac_equation>
 
 

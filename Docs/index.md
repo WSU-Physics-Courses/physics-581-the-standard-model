@@ -17,42 +17,34 @@
 --> 
 
 
-Welcome to Phys 581 - The Standard Model of Particle Physics!  This is the main documentation page for the
-course.  For more class information, please see the {ref}`sec:sylabus`.
+Welcome to Phys 581 - The Standard Model of Particle Physics!  This is the main
+documentation page for the course.  For more class information, please see the
+{ref}`sec:sylabus`.
 
-Instructors: the information presented here at the start of the course documentation is
-contained in the `Docs/index.md` file, which you should edit to provide an overview of
-the course.
-
-One reasonable option might be to replace this by a literal include of the top-level
-`README.md` file with the following code:
-
-````markdown
-```{include} ../README.md
-``` 
-````
+The following topics are relatively complete and should be reviewed.  More material in a
+somewhat incomplete state is available under Class Notes in the sidebar.
 
 ```{toctree}
 ---
 maxdepth: 2
-caption: "Contents:"
+caption: "Renormalization Group:"
 titlesonly:
-hidden:
 ---
-Syllabus
-
-References
+ClassNotes/RenormalizationGroup
+ClassNotes/RandomWalks
 ```
 
 ```{toctree}
 ---
 maxdepth: 2
-caption: "Prerequisites:"
+caption: "Resources:"
 titlesonly:
 hidden:
 glob:
 ---
+Syllabus
 Prerequisites/*
+References
 ```
 
 ```{toctree}

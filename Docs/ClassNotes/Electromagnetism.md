@@ -585,7 +585,7 @@ relativistic metric.
 :::{admonition} Convention in Mathematics
 In terms of the anti-symmetric matrices $\mat{T}_{a}$, we have
 \begin{gather*}
-  [\mat{T}_{a}, \mat{T}_{b}] = c_{ab}^{}{c} \mat{T}_{c}.
+  [\mat{T}_{a}, \mat{T}_{b}] = c_{ab}{}^{c} \mat{T}_{c}.
 \end{gather*}
 For rotations in 3D, this notation make sense.
 

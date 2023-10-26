@@ -5,14 +5,14 @@ jupytext:
     extension: .md
     format_name: myst
     format_version: 0.13
-    jupytext_version: 1.13.8
+    jupytext_version: 1.15.2
 kernelspec:
   display_name: Python 3 (phys-581)
   language: python
   name: phys-581
 ---
 
-```{code-cell}
+```{code-cell} ipython3
 :tags: [hide-cell]
 
 import mmf_setup;mmf_setup.nbinit()
@@ -40,7 +40,7 @@ with "spherical" symmetry:
 
 Here we demonstrate numerically in $d=2$ dimensions with $\sigma=1$:
 
-```{code-cell}
+```{code-cell} ipython3
 :tags: [hide-input]
 
 rng = np.random.default_rng(seed=2)
@@ -222,7 +222,7 @@ better?)*
 ::::
 :::::
 
-```{code-cell}
+```{code-cell} ipython3
 # Define a random number generator with a seed so the results are reproducible
 from scipy.special import gamma
 rng = np.random.default_rng(seed=2)
@@ -242,7 +242,7 @@ ax.grid('on')
 ax.legend(loc="upper left");
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 :tags: [hide-cell]
 
 from myst_nb import glue
@@ -321,7 +321,7 @@ then try to adjust the units so that the random walk wanders the same distance a
 the starting point.  The following figure shows that the scaling we specified above
 $\lambda = 1/\sqrt{N}$ works.
 
-```{code-cell}
+```{code-cell} ipython3
 :tags: [hide-input]
 
 from matplotlib.patches import Rectangle
@@ -376,7 +376,8 @@ Thus, it is natural to work with the Fourier transform of the distribution:
   e^{\I \vect{R}\cdot\vect{k}}\Bigl(\tilde{p}(\vect{k})\Bigr)^{N}.
 \end{gather*}
 
-:::{margin} {cite:p}`Creswick:1992` and {cite:p}`McGreevy:2018` work through the
+:::{margin} 
+{cite:p}`Creswick:1992` and {cite:p}`McGreevy:2018` work through the
 $d$-dimensional spherically symmetric case.
 :::
 For simplicity, consider a $d=1$-dimensional random walk.  One way of parameterizing the
@@ -396,7 +397,7 @@ by the derivatives of $h(t) = \ln \braket{e^{tx}}$.
 
 :::{margin}
 Make sure that rescaling make sense to you.  We found that the unbiased gaussian had a
-*fixed point** after averaging $N$ steps and then rescaling $\vect{R}_n \rightarrow
+*fixed point* after averaging $N$ steps and then rescaling $\vect{R}_n \rightarrow
 \vect{R}_n/\sqrt{N}$. Now we express rescaling as $\vect{k} \rightarrow
 \vect{k}/\sqrt{N}$ which might be troubling since the dimensions are $[\vect{k}] =
 D^{-1}$ while $[\vect{R}] = D$.  Convince yourself that the RG transform indeed
@@ -444,6 +445,14 @@ One important exception is if the theory has underlying **symmetries**.  In this
 if we start the flow in a sector of the theory that respects a certain symmetry, then we
 expect that the flow will not generate terms that break the symmetry.
 
+:::{margin}
+¹Assuming no anomalies.
+:::
+In our previous example of an unbiased random walk, the probability distribution was
+symmetric under parity $x \rightarrow -x$ or $\vect{r} \rightarrow -\vect{r}$.  This
+symmetry ensures¹ that if $C_1 = 0$, then it will remain zero, even though the operator
+is **relevant** under the RG transform.
+
 :::{admonition} Anomalies
 :class: dropdown
 
@@ -476,14 +485,6 @@ anomaly...)*
 
 ![A hair whorl.](https://upload.wikimedia.org/wikipedia/commons/thumb/a/af/Baby_hairy_head_DSCN2483.jpg/180px-Baby_hairy_head_DSCN2483.jpg)
 :::
-
-:::{margin}
-¹Assuming no anomalies.
-:::
-In our previous example of an unbiased random walk, the probability distribution was
-symmetric under parity $x \rightarrow -x$ or $\vect{r} \rightarrow -\vect{r}$.  This
-symmetry ensures¹ that if $C_1 = 0$, then it will remain zero, even though the operator
-is **relevant** under the RG transform.
 
 ### Universality
 
@@ -577,7 +578,7 @@ in the theory.**  Here we demonstrate what would have happened if we applied the
 previous RG analysis to a biased random walk, again with $\sigma = 1$ but now with a
 small bias to the upper right of $\vect{\mu} = (0.05, 0.05)$.
 
-```{code-cell}
+```{code-cell} ipython3
 :tags: [hide-input]
 
 from matplotlib.patches import Rectangle
@@ -646,12 +647,19 @@ $C_2 \rightarrow C_2$: the rest are **irrelevant**.
 
 :::{margin}
 This flow is somewhat heuristic since $N$ is not a continuous parameter, but it
-illustrates the main points.
+illustrates the main points.  Let the initial coefficients be $C_n(1)$, then
+\begin{gather*}
+  C_n(N) = N^{1-n/2}C_n(1).\\
+  \diff{C_n(N)}{N} = \frac{1-\tfrac{n}{2}}{N^{n/2}}C_n(1).\\
+\end{gather*}
+
+
+
 :::
 The RG transformation can be thought of as flow in this space:
 
 \begin{gather*}
-\diff{C_n}{N} = \frac{1-\tfrac{n}{2}}{N^{n/2}}C_n.
+  \diff{C_n}{N} = \frac{1-\tfrac{n}{2}}{N} C_n(N).
 \end{gather*}
 
 No matter where we start $\vect{C}(0)$, the theory will "flow" towards the $(C_1, C_2)$
@@ -661,32 +669,41 @@ theories tend to flow towards simpler theories.
 
 Now consider the flow in this plane (coarse graining with steps of $N=2$):
 
-```{code-cell}
+```{code-cell} ipython3
 :tags: [hide-input]
 
-c = np.linspace(-1, 1)
+c = np.linspace(-1, 1, 500)
 C = np.meshgrid(c, c)
 
 N = 2.0
 n = np.array([1, 2])[:, None, None]
 C1, C2 = C
-dC1, dC2 = dC_dN = (1-n/2)/N**(n/2)*C
+dC1, dC2 = dC_dN = (1-n/2)/N*C
 
 n = np.array([1, 3])[:, None, None]
 C1, C3 = C
-dC1, dC3 = dC_dN = (1-n/2)/N**(n/2)*C
+dC1, dC3 = dC_dN = (1-n/2)/N*C
 
 fig, axs = plt.subplots(1, 2, figsize=(10, 5))
 for ax in axs:
     ax.grid("on")
-axs[0].streamplot(C1, C2, dC1, dC2)
+ys = np.linspace(-1,1,20)
+start_points = [(0.5, C1) for C1 in ys] + [(-0.5, C1) for C1 in ys]
+axs[0].streamplot(C1, C2, dC1, dC2, start_points=start_points)
+axs[0].plot(0*ys, ys, 'oC0')
 axs[0].set(xlabel="$C_1$", ylabel="$C_2$")
 axs[1].yaxis.tick_right()
 axs[1].yaxis.set_label_position("right")
 axs[1].streamplot(C1, C3, dC1, dC3)
 axs[1].set(xlabel="$C_1$", ylabel="$C_3$")
+c1, c3 = (0.002, -1)
 axs[1].streamplot(C1, C3, dC1, dC3, 
-                  start_points=[(0.001, -1)], color='k', linewidth=2);
+                  start_points=[(c1, c3)], color='k', linewidth=2);
+dlog2_N = 1+int(np.log2(1/c1**2))
+Ns = 2**np.arange(dlog2_N)
+c1s = c1*np.sqrt(Ns)
+c3s = c3/np.sqrt(Ns)
+axs[1].plot(c1s, c3s, '.k');
 ```
 
 :::{margin}
@@ -704,141 +721,12 @@ The right plot shows a slice through the $(C_1, C_3)$ plane (ignoring the "borin
 marginal parameter $C_2$).  Here we see quite typical RG flow: the irrelevant parameter
 $C_3$ flows toward the fixed point, while the relevant parameter $C_1$ flows away.
 Consider the flow shown as the thick black line of a microscopic theory starting with
-$(C_1, C_2, C_3) = (0.001, 1.0, -1)$.
-
-```
-from scipy.optimize import root
-
-def f(a, C=(0.02, 1, 0.2), N=1000000):
-    rng = np.random.default_rng(2)
-    x = rng.normal(size=N)
-    y = a[0]*x*np.cosh(a[1] + x)/(np.cosh(a[2] + x))
-    C1 = y.mean()
-    C2 = y.std()**2
-    C3 = ((y-C1)**3).mean()
-    Cs = np.asarray([C1, C2, C3])
-    return Cs/C - 1
+$(C_1, C_2, C_3) = (0.002, 1.0, -1)$.  The points are equally spaced after each
+coarse-graining step with $N=2$.  Notice that the evolution slows near the fixed-point
+at the origin.
 
 
-res = root(f, [1.0,-0.1,0])
-print(res.x)
-#rng = np.random.default_rng(2)
-#a = res.x
-#y = a[0]*x*np.cosh(x+a[1])/np.cosh(x+a[2])
-#C1 = y.mean()
-#C2 = y.std()**2
-#assert np.allclose(C2, ((y-C1)**2).mean())
-#C3 = ((y-C1)**3).mean()
-#plt.hist(y, 100, density=True);
-#C1, C2, C3, a
-```
-
-```{code-cell}
-%matplotlib inline
-from ipywidgets import interact, widgets
-import numpy as np, matplotlib.pyplot as plt
-# Here we generate a 1D random walk with a non-gausian "microscopic"
-# probability, then coarse-grain and rescale to demonstrate how the
-# distribution changes.
-
-class RandomWalk:
-    """View a 1D random walk from various scales."""
-    # Parameters to generate transformation
-    a = [0.92424594, 1.88032074, 1.75306592]
-    a = [ 1.09839427, -2.1781062, -2.31120397]
-    N = 2  # Coarse graining step number
-    Nwalks = 5
-    Nsamples = N**20
-    Nsteps = N**10   # Each frame shows this many steps
-
-    def __init__(self, **kw):
-        for k in kw:
-            if not hasatter(self, k):
-                raise ValueError(f"Unknown parameter {k}")
-            setattr(self, k, kw[k])
-        self.init()
-        
-    def init(self):
-        self.walks = self.get_walks()
-        self.steps = np.arange(self.Nsamples)
-        self.Nscales = int(np.log2(self.Nsamples // self.Nsteps)/np.log2(self.N))
-        self.colors = [f"C{_n}" for _n in range(self.Nwalks)]
-        
-    def get_walks(self, seed=2):
-        rng = np.random.default_rng(seed=seed)
-        x = rng.normal(size=(self.Nwalks, self.Nsamples))
-        # Change variables to a non-gaussian 
-        a = self.a
-        r = a[0]*x*np.cosh(x+a[1])/np.cosh(x+a[2])
-        C1 = r.mean()
-        C2 = r.std()**2
-        C3 = ((r-C1)**3).mean()
-        self.Cs = [C1, C2, C3]
-        print(f"C1={C1:.4f}, C2={C2:.4f}, C3={C3:.4f}")
-        walks = np.cumsum(r, axis=-1)
-        return walks
-
-    def draw_background(self, ax):
-        for walk, color in zip(self.walks, self.colors):
-            ax.plot(walk, self.steps, color)
-    
-    def get_frame(self, RG_step, ax, loc=0, data=data):
-        """
-        Argumets
-        --------
-        loc : float
-            Location along total walk of zoom.
-        """
-        walks, steps = self.walks, self.steps
-        ind = int(loc*(self.Nsamples-1))
-        x0, y0 = walks[0, ind], steps[ind]
-        C1, C2, C3 = self.Cs
-        sigma = np.sqrt(C2)
-        N = 2**RG_step
-        dx = sigma * np.sqrt(N)
-        lam = 1/np.sqrt(N)
-        ax.set(xlim=(x0-10*dx, x0+10*dx),
-               ylim=(ind-N*Nsteps/2, ind+N*Nsteps/2),
-               title=f"C1={C1:.4f}, C2={C2:.4f}, C3={C3:.4f}")
-        
-        #x_, y_ = walks[:, ::N], steps[::N]
-        #dx_ = np.diff(x_, axis=0)*lam
-        #C1 = dx_.mean()
-        #C2 = dx_.std()**2
-        #C3 = ((dx_-C1)**3).mean()
-        #for n in range(len(walks)):
-        #    ax.plot(x_[n], y_, f"C{n}")
-        #ax.set(xlim=(x_[:N].min(), x_[:N].max()), 
-        #       ylim=(y_[:N].min(), y_[:N].max()),
-        #       title=f"C1={C1:.4f}, C2={C2:.4f}, C3={C3:.4f}")
-
-w = RandomWalk()
-#fig, ax = plt.subplots()
-#w.draw_background(ax)
-
-@interact(loc=(0,1,0.01), n=(0, w.Nscales))
-def draw_interactive(n=0, loc=0):
-    N = 2**n
-    fig, ax = plt.subplots()
-    w.draw_background(ax)
-    w.get_frame(RG_step=n, ax=ax, loc=loc)
-    
-    #ax.plot(np.cumsum(y), np.arange(len(y)))
-    #for n in range(frames):
-    #    get_frame(n, ax)
-    #get_frame(n, ax)
-    #get_frame(2,ax)
-    #get_frame(3,ax)
-    #get_frame(4,ax)
-    #get_frame(13,ax)
-```
-
-```{code-cell}
-ax.set_xlim(0,10)
-out
-```
-
-```{code-cell}
+```{code-cell} ipython3
 :tags: [hide-cell]
 
 
@@ -998,7 +886,7 @@ Although qualitatively different, this also belongs to a universality class with
 1$. **(Check this.)**
 :::
 
-```{code-cell}
+```{code-cell} ipython3
 # Cauchy random walk
 rng = np.random.default_rng(seed=2)
 N = 2**20

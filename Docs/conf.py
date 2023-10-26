@@ -65,9 +65,9 @@ extensions = [
     # "jupyter_book",
     # "sphinx_thebe",
     # "sphinx_external_toc",
-# 
+    #
     "sphinx_jupyterbook_latex",
-# 
+    #
     "sphinx_comments",  # Hypothes.is comments and annotations
     "sphinx_design",
     "sphinx_togglebutton",
@@ -139,7 +139,7 @@ html_theme = "sphinx_book_theme"  # Theme for JupyterBook
 html_logo = "_static/wsu-logo.svg"
 
 html_theme_options = {
-#
+    #
 }
 
 # Override version number in title... not relevant for docs.
@@ -183,7 +183,6 @@ if html_logo.endswith(".svg"):
 ######################################################################
 # Variables with course information
 course_package = "phys_581"
-
 
 
 ######################################################################
@@ -281,6 +280,7 @@ class AsideAdmonition(SolutionAdmonition):
     show_all = False  #  If True, always show.  Useful for writing
     title_text = "Aside"
 
+
 math_defs_filename = "_static/math_defs.tex"
 
 html_context = {
@@ -327,7 +327,7 @@ def my_init(app):
     run init` as normal, this will create a **whole new conda environment** and install
     the kernel from there.
     """
-    mathjax_offline = True
+    mathjax_offline = False
     if on_rtd:
         subprocess.check_call(
             [
@@ -395,4 +395,3 @@ def setup(app):
     app.add_directive("solution", SolutionAdmonition)
     app.add_directive("doit", DoItAdmonition)
     app.add_directive("aside", AsideAdmonition)
-    
