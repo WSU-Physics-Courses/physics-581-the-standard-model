@@ -5,14 +5,14 @@ jupytext:
     extension: .md
     format_name: myst
     format_version: 0.13
-    jupytext_version: 1.14.0
+    jupytext_version: 1.15.2
 kernelspec:
   display_name: Python 3 (phys-581)
   language: python
   name: phys-581
 ---
 
-```{code-cell}
+```{code-cell} ipython3
 :tags: [hide-cell]
 
 import mmf_setup;mmf_setup.nbinit()
@@ -56,7 +56,7 @@ suggesting that the solution might be expressed as a power series in $\epsilon$:
   \end{multlined}
 \end{align*}
 
-```{code-cell}
+```{code-cell} ipython3
 :tags: [hide-cell]
 
 import sympy
@@ -77,6 +77,9 @@ f0*sum(terms)
 :::{margin}
 The [Online Encyclopedia of Integer Sequences (OEIS)][OEIS] can be helpful for
 determining the form of series like this.
+:::
+:::{margin}
+Warning: Scipy changed the meeting of `factorial2(-1)`.  Here we need $-1!! = 1$.
 :::
 For example, we can express $Z(0, \epsilon)$ as
 \begin{gather*}
@@ -120,7 +123,7 @@ asymptotic series will be best if truncated at $n = N$ once the terms stop decre
 Here we demonstrate some properties of the asymptoticity of the expansion for
 $F(\epsilon) = Z(0, \epsilon)/\sqrt{2\pi}$.
 
-```{code-cell}
+```{code-cell} ipython3
 from functools import partial
 from scipy.special import factorial, factorial2
 from scipy.integrate import quad
@@ -136,8 +139,14 @@ fig, ax = plt.subplots()
 ns = np.arange(50)
 ax.plot(epss, list(map(F, epss)), ':k')
 ylim = ax.get_ylim()
+
+def coeff(n):
+    if n < 1:
+        return 1
+    return factorial2(4*n-1)/factorial(n)
+
 for N in range(1, 10):
-    ax.plot(epss, np.sum([factorial2(4*n-1)/factorial(n)*(-epss)**n for n in range(N)], axis=0), 
+    ax.plot(epss, np.sum([coeff(n)*(-epss)**n for n in range(N)], axis=0), 
     '-', label=f"{N=}")
 ax.legend()
 ax.set(xlabel="$\epsilon$", ylabel="$F(\epsilon)$", ylim=ylim);
@@ -227,13 +236,20 @@ gives:)*
   \sqrt{\frac{e}{\pi (N+1)}}e^{-(N+1)}
 \end{gather*}
 :::
-```{code-cell}
+
+```{code-cell} ipython3
 :tags: [hide-cell]
 
 import sympy
 from sympy import factorial2, factorial
 n = np.arange(100)
-log_a = [sympy.log(factorial2(4*n-1)/factorial(n)).evalf() for n in n]
+
+def coeff(n):
+    if n < 1:
+        return 1
+    return factorial2(4*n-1)/factorial(n)
+
+log_a = [sympy.log(coeff(n)).evalf() for n in n]
 fig, ax = plt.subplots()
 ax.plot(n, log_a, '-', label=f'$(4n-1)!!/n!$')
 ax.plot(n, -np.log(np.sqrt(np.pi*n)) + n*np.log(16*n/np.exp(1)), '--', label='Sterling')
@@ -244,7 +260,7 @@ a, b, n = sympy.var('a, b, n')
 ((a*n/sympy.exp(1))**(n)/sympy.sqrt(sympy.pi*n)).diff(n).simplify()
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 :tags: [hide-input]
 
 from functools import partial
@@ -254,11 +270,16 @@ from scipy.integrate import quad
 def f(q, eps):
     return np.exp(-q**2/2-eps*q**4)/np.sqrt(2*np.pi)
 
+def coeff(n):
+    if n < 1:
+        return 1
+    return factorial2(4*n-1)/factorial(n)
+
 nes = np.arange(1, 30)[::4]
 epss = np.exp(1/2/nes)/16/nes
 ns = np.arange(50)
 
-cs = np.array([factorial2(4*n-1)/factorial(n) for n in ns])
+cs = np.array([coeff(n) for n in ns])
 fig, ax = plt.subplots()
 for ne, eps in zip(nes, epss):
     exact = quad(partial(f, eps=eps), -np.inf, np.inf, epsabs=1e-13, epsrel=1e-13)[0]
@@ -284,7 +305,7 @@ The black pluses above represent our error estimate $E(N)$ after optimally trunc
 the $n=N$ which minimizes the size of the terms $a_n\epsilon^n$ and the blue lines
 represent the simplified upper bound of the $N$'th term given above.
 
-```{code-cell}
+```{code-cell} ipython3
 import sympy
 m, J, eps = sympy.var(r'm,J,\epsilon')
 m = 1
@@ -386,20 +407,13 @@ A weaker form is to extend the partial sums:
   F_n(\epsilon) = \sum_{n=0}^{N}f_n \epsilon^n.
 \end{gather*}
 
-
-
-
-
-
-
-```{code-cell}
+```{code-cell} ipython3
 import sympy
 q, eps = sympy.var('q,\epsilon', positive=True)
 Q = 2*sympy.exp(-q**2/2-eps*q**4).integrate((q, 0, sympy.oo))
 Q = 2*sympy.exp(-eps*q**4).integrate((q, 0, sympy.oo))
 Q
 ```
-
 
 # Assessment
 
