@@ -2,7 +2,7 @@
 Resources, Readings, and References
 ===================================
 
-## Textbook
+## Textbooks
 
 The textbooks for this course are:
 
@@ -12,6 +12,47 @@ The textbooks for this course are:
 * {cite:p}`Georgi:2019`
 
 For details, please see the {ref}`sec:sylabus`.
+
+## Conventions
+
+Different texts use different conventions.  In these notes, we follow the conventions of
+
+* {cite}`Donoghue:2022`: *(Eqs. (3.22), (4.35) and (4.44).)*
+* {cite}`Zee:2010`: *(p. xxv and §I.3 Eq. (21).)*
+* {cite}`Langacker:2017`:  *(Table 1.2 and Eq. (2.29).)*
+
+  \begin{gather*}
+    \mat{g} = \diag(1, -1, -1, -1),\\
+    (\partial_\mu\partial^\mu + m^2)D_F(x) = -\delta^{(4)}(x),\\
+    \tilde{D}_{F}(p^{\mu}) = \frac{1}{p^2 - m^2 + \I 0^+}.
+  \end{gather*}
+
+* {cite}`t-Hooft:2016`: *(C.f. Footnote 1 on Page 6, and Eqs. (2.6), (2.9), and (2.10).)*
+
+  \begin{gather*}
+    \mat{g} = \diag(-1, 1, 1, 1),\\
+    (-\partial_\mu\partial^\mu + m^2)D_F(x) = \delta^{(4)}(x),\\
+    \tilde{D}_{F}(p^{\mu}) = \frac{1}{\vect{p}^2 - (p^0)^2 + m^2 - \I 0^+}.
+  \end{gather*}
+
+* {cite}`Lancaster:2014`: *(§0.4 Eq. (13) and Eqs. (17.16) and (17.25))*
+  \begin{gather*}
+    \mat{g} = \diag(1, -1, -1, -1),\\
+    (\partial_\mu\partial^\mu + m^2)D_F(x) = -\I\delta^{(4)}(x),\\
+    \tilde{D}_{F}(p^{\mu}) = \frac{\I}{p^2 - m^2 + \I 0^+}.
+  \end{gather*}
+
+* {cite}`Srednicki:2007`
+
+* {cite}`Maggiore:2005`: *(p. xii and Eqs. (5.82) and (5.83).)*
+  \begin{gather*}
+    \mat{g} = \diag(1, -1, -1, -1),\\
+    (\partial_\mu\partial^\mu + m^2)D_F(x) = -\I\delta^{(4)}(x),\\
+    \tilde{D}_{F}(p^{\mu}) = \frac{\I}{p^2 - m^2 + \I 0^+}.
+  \end{gather*}
+
+
+
 
 (sec:references)=
 References

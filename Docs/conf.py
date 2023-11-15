@@ -13,6 +13,8 @@
 from pathlib import Path
 import os.path
 import subprocess
+from urllib import request
+
 from sphinx.util.fileutil import copy_asset
 
 import mmf_setup
@@ -348,6 +350,12 @@ def my_init(app):
         ROOT = str(Path(__file__).parent.parent)
         subprocess.check_call(["make", "-C", ROOT, "init"])
 
+        # Check if we can access the MathJaX CDN.  If not, fallback to local files.
+        try:
+            request.urlopen("https://cdn.jsdelivr.net/", timeout=1)
+        except request.URLError as err:
+            mathjax_offline = True
+
     if mathjax_offline:
         # For this to work, you need to put mathjax js files in Docs/_static/mathjax
         # Docs/_static/
@@ -373,7 +381,7 @@ def my_init(app):
         # https://gitlab.com/thomaswucher/sphinx-mathjax-offline/-/blob/master/sphinx-mathjax-offline/__init__.py
 
         ext_dir = os.path.dirname(os.path.abspath(__file__))
-        mathjax_dir = ext_dir + "_static/mathjax"
+        mathjax_dir = os.path.join(ext_dir, "_static/mathjax")
         copy_asset(mathjax_dir, os.path.join(app.outdir, "_static", "mathjax"))
         app.config.mathjax_path = "mathjax/tex-chtml.js"
         app.config.mathjax_path = "mathjax/tex-svg.js"
@@ -382,6 +390,7 @@ def my_init(app):
         # I don't know why this is needed, but if it is not turned off, then
         # "mathjax_ignore" is added to the top-level class, preventing local rendering.
         app.config.myst_update_mathjax = False
+        print(f"Using MathJaX Offline.  Make sure it is installed in {mathjax_dir}")
 
 
 def setup(app):
