@@ -381,7 +381,7 @@ def my_init(app):
         # https://gitlab.com/thomaswucher/sphinx-mathjax-offline/-/blob/master/sphinx-mathjax-offline/__init__.py
 
         ext_dir = os.path.dirname(os.path.abspath(__file__))
-        mathjax_dir = os.path.join(ext_dir, "_static/mathjax")
+        mathjax_dir = os.path.join(ext_dir, "_static", "mathjax")
         copy_asset(mathjax_dir, os.path.join(app.outdir, "_static", "mathjax"))
         app.config.mathjax_path = "mathjax/tex-chtml.js"
         app.config.mathjax_path = "mathjax/tex-svg.js"

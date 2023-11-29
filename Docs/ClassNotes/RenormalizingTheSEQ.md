@@ -162,7 +162,7 @@ import warnings;warnings.simplefilter("error")
 from functools import partial
 from scipy.optimize import root
 from tqdm import tqdm
-from phys_552_2022 import seq
+from phys_581 import seq
 
 class SEQ(seq.CoulombSEQ):
     c = [-2.0]

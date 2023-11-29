@@ -14,7 +14,7 @@ dependencies:
   # Documentation
   - jupytext
   - pandoc
-  - notebook
+  - notebook<7
   - conda-forge::jupyter_nbextensions_configurator    
   
   # Pip-only dependencies
