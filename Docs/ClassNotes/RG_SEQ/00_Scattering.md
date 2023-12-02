@@ -426,10 +426,7 @@ axr.set(ylim=(-50, 9), xlabel="$\kappa r$", ylabel="$V(r)/E_b$")
 ax.legend();
 ```
 
-
-(sec:scattering)=
-General Scattering
-==================
+## General Scattering
 
 Recall that the Schrödinger equation has the following form in spherical coordinates:
 \begin{align*}
