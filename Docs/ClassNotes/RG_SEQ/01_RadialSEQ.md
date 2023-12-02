@@ -478,8 +478,6 @@ ax.legend();
 ```
 This test confirms that we have correctly implemented the two methods.
 
-
-
 :::{margin}
 Here we will consider only the spherically symmetric ($S$-wave) orbits and phase-shifts
 $l=m=0$ with constant spherical harmonics $Y_{0}^{0}(\theta, \phi)$. If you are not

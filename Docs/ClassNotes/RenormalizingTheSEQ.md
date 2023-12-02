@@ -35,11 +35,32 @@ distances $r\rightarrow 0$:
   \lim_{r\rightarrow \infty} V(r) \rightarrow \frac{-\alpha}{r}.
 \end{gather*}
 
+To do this, I suggest you complete the following tasks:
+
+1. Get a method to numerically solve the radial Schrödinger equation.  You will use this
+   to compute your "experimental" data.  Note: this is a little challenging due to the
+   nature of the Coulomb potential being singular at the origin, and long-ranged
+   (falling off slowly $V(r) \sim 1/r$ at long distances).  The following notes have
+   many hints and suggestions, but please try to use them only as needed.
+
+   ```{toctree}
+   ---
+   maxdepth: 2
+   titlesonly:
+   glob:
+   ---
+   RG_SEQ/*
+   ```
+
+2. Perform the perturbative analysis discussed in {cite:p}`Lepage:1997` but following
+   with your own data.  If there is anything you don't know how to do, please ask on the
+   [Hypothes.is document](https://hyp.is/ITZMcI5tEe6EBmPaQth57Q/emailwsu-my.sharepoint.com/personal/m_forbes_wsu_edu/Documents/Courses/Physics%20581%20Standard%20Model/1997_Lepage-HowToRenormalizeTheSchrodingerEquation.pdf?CT=1701230953632&OR=ItemsView) so I can help fill in background in class or online.
+
 
 ## How to Solve the Schrödinger Equation
 
 To easily work through the discussion in {cite:p}`Lepage:1997`, we must be able to
-formulate and solve the Schrödinger equation fr spherically symmetric potentials.
+formulate and solve the Schrödinger equation for spherically symmetric potentials.
 
 ### Radial Equation
 Spherical symmetry allows use to express this as a simple 1D boundary value problem
