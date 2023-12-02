@@ -21,7 +21,7 @@ import logging;logging.getLogger('matplotlib').setLevel(logging.CRITICAL)
 import numpy as np, matplotlib.pyplot as plt
 ```
 
-(sec:ScatteringS)=
+(sec:Scattering)=
 S-Wave Scattering
 =================
 
@@ -58,6 +58,14 @@ degenerate plane-waves for a given energy $E$ into specific combinations that ha
 definite angular momentum, which is the point of [spherical harmonics][] as we shall
 discuss below in section {ref}`sec:scattering`.
 
+## Scattering Amplitude
+
+:::{margin}
+Here $\uvect{r} = \vect{r}/r$ is the unit vector in the $\vect{r}$ direction.  It
+specifies a location on the sphere, and could be replaced in spherical coordinates by
+$\uvect{r} \equiv (\theta, \phi)$.  Sometimes one also uses the notation $\Omega$ in the
+context of $\d{\Omega} = \sin \theta\, \d{\theta}\, \d{\phi}$ as being the solid angle.
+:::
 Scattering is studied by looking for wavefunctions of the form
 \begin{gather*}
   \psi(\vect{r}) = e^{\I k z} + f(k, \uvect{r})\frac{e^{\I k r}}{r}
@@ -73,6 +81,20 @@ i.e. a long-wavelength probe should only see that there is small scattering site
 will not be able to resolve any details about the angular structure.  This needs some
 justification, but holds true, and we shall use this here.
 
+:::{margin}
+**To Do:** Explain this better, connecting with classical scattering.
+:::
+The scattering amplitude $f$ is complex, but has the dimensions of length.  Its
+magnitude can be interpreted as giving the distance from the scattering potential where
+the flux of scattered particles equals the flux of incoming particles.  Thus, the
+integral gives the **total cross-section**:
+\begin{gather*}
+  \sigma = \int \d{\Omega} \abs{f(k, \uvect{r})}^2 
+  = 4\pi \abs{f(k)}^2,
+\end{gather*}
+where the latter is valid in the spherically symmetric low-energy limit.
+
+## Phase Shifts
 :::{margin}
 We consider the specific state $\vect{k} = (0, 0, k)$: $\vect{k}\vect{r} = k z = k
 r \cos \theta$. Recall also that integrating over the entire sphere in 3D gives:
@@ -133,63 +155,64 @@ relationship between the phase shift $\delta$ and the scattering amplitude $f(k)
 :::
 ::::
 \begin{gather*}
-  f(k) = e^{\I \delta}\frac{\sin\delta}{k}
+  f(k) = e^{\I \delta}\frac{\sin\delta}{k}.
 \end{gather*}
-
-
-**To Do**: Show that this gives the correct $\delta$ (not $2\delta$) phase shift in the
-radial equation.
-
-To see that this works, note that the radial wavefunction $u(r) = \psi(r)/r$ for $V(r) =
-0$ satisfy
+Note that this implies that the total cross-section can be expressed as:
 \begin{gather*}
-  u''(r) - \frac{l(l+1)}{r^2}u(r) + k^2u(r) = 0,\\
-  \psi''(r) + \frac{2}{r}\psi'(r)u''(r) + \left(k^2 - \frac{l(l+1)}{r^2}\right)\psi(r) = 0.
+  \sigma = 4\pi \abs{f}^2 = 4\pi \frac{\Im f}{k}.
 \end{gather*}
+This is a consequence of the [optical theorem][] which relates the total number of
+scattered particles to the loss of scattered particles in the forward direction. *(The
+optical theorem is written in terms of forward scattering amplitude $\Im f(\theta=0)$,
+but here $f$ is independent of the angle, so $f(\theta=0) = f$.)*
 
-
+This form also explains why we introduced a phase shift of $2\delta$ in the outgoing
+wave.  Consider the radial wavefunction $u(r) = r\psi(r)$.  In this picture, we have an
+incoming plane wave $-e^{-\I kr}$ scattering into a phase-shifted outgoing wave $e^{\I
+(kr + 2\delta)}$:
 \begin{gather*}
-  r^2\psi''(r) + 2r\psi'(r) + \Bigl(k^2r^2 - l(l+1)\Bigr)\psi(r) = 0.
+  u(r) \xrightarrow[r \rightarrow \infty]{}
+  e^{\I(kr + 2\delta)} - e^{-\I kr}
+  = 2\I e^{\I\delta}\frac{e^{\I(kr + \delta)} - e^{-\I (kr + \delta)}}{2\I}
+  = 2\I e^{\I\delta}\sin(kr + \delta).
 \end{gather*}
-:::{margin}
-Changing variables to $x=kr$ and letting $y(x) = \psi(r)$, and multiplying through by
-$x^2$ bthis becomes
+*(Remember that multiplying a wavefunction by an overall phase or constant does not
+affect the physics.  Thus, the factor of $2\I e^{\I\delta}$ is physically
+inconsequential.)*  Thus, the scattering results in an interference pattern that is 
+phase-shifted by $\delta$ from the interference pattern obtained with no potential.
+
+:::::{admonition} Calculating the phase shift $\delta$.
+:class: tip
+
+This interference can be used to determine the relationship between the S-wave phase
+shift $\delta$ and the energy $E$ using a slight trick.  Place the potential $V(r)$ at
+the center of a large spherical box of radius $R$ such that the radial wavefunction
+satisfies
 \begin{gather*}
-  x^2 y'' + 2xy' + \Bigl(x^2 - l(l+1)\Bigr)y = 0,
+  \left(
+    \frac{-\hbar^2}{2m}\diff[2]{}{r} - V(r)
+  \right)u(r) = Eu(r), \qquad
+  u(0) = u(R) = 0.
 \end{gather*}
-whose solutions are the [spherical Bessel functions][] $j_l(x)$ and $y_l(x)$:
-\begin{align*}
-  j_l(x) &= \phantom{-}(-x)^l\left(\frac{1}{x}\diff{}{x}\right)^n \frac{\sin x}{x},\\
-  y_l(x) &= -(-x)^l\left(\frac{1}{x}\diff{}{x}\right)^n \frac{\cos x}{x}.
-\end{align*}
-:::
-
-
-
-
-
-
-
-
+Solutions to this BVP outside of the range of the potential will have the form of the
+interference pattern $\sin(kr + \delta)$ with the boundary condition $u(R) = 0$ so that
 \begin{gather*}
-  u''(r) + k^2u(r) = 0, \qquad u(r) = f e^{\I k r} + g e^{-\I k r}.
+  kR + \delta = n\pi.
 \end{gather*}
-Since have only an outgoing wave, $g=0$, and we have the specified form for the
-scattered wave.
-
-
-
-
-
-
-
-
-
-
-
-
+Extending this solution beyond $R$ gives a solution to the S-wave scattering problem
+with precisely the same relationship between $\delta$ and $E = \hbar^2 k^2/2m$ for this
+potential.
+:::::
 
 ## Scattering Length
+
+\begin{gather*}
+  \Im f = \frac{\sin^2 \delta}{k} = k\abs{f}^2
+\end{gather*}
+
+
+
+
 
 :::{margin}
 The normalization follows from
@@ -421,18 +444,83 @@ Recall that the Schrödinger equation has the following form in spherical coordi
     + \frac{l(l+1)}{r^2}\right)\psi_r(r)
   &= \frac{2m}{\hbar^2}\bigl(V(r) - E\bigr)\psi_r(r),
 \end{align*}
-or, introducing the radial wavefunction
+```{code-cell}
+:tags: [hide-input, margin]
+
+from scipy.special import spherical_jn, spherical_yn
+
+kr = np.linspace(0, 20, 1000)
+fig, ax = plt.subplots(figsize=(4,3))
+for l in range(3):
+    ax.plot(kr, spherical_jn(l, kr), f"C{l}-", label=f"$j_{l}(kr)$")
+for l in range(3):
+    ax.plot(kr, spherical_yn(l, kr), f"C{l}--", label=f"$y_{l}(kr)$")
+ax.set(xlabel="$kr$", ylim=(-0.5, 1.1), title="Spherical Bessel functions",
+       yticks=[-0.5, 0, 0.5, 1])
+ax.legend(loc='upper right', ncol=2)
+plt.tight_layout()
+```
+or, introducing the radial wavefunction $u(r) = r\psi_r(r)$, 
 \begin{gather*}
-  \psi_{r}(r) =\frac{u(r)}{r}, \\
   \left(\diff[2]{}{r} - \frac{l(l+1)}{r^2}\right)u_{nl}(r)
   = \frac{2m}{\hbar^2}\bigl(V(r) - E\bigr) u_{nl}(r).
 \end{gather*}
 
+:::::{admonition} Spherical Bessel functions
+:class: dropdown
+
+The [spherical Bessel functions][] are
+\begin{align*}
+  j_n(x) &= +(-x)^n\left(\frac{1}{x}\diff{}{x}\right)^{n}\frac{\sin x}{x}
+    \xrightarrow[x \rightarrow \infty]{}\frac{+\sin(x - \tfrac{\pi}{2}n)}{x}
+  ,\\
+  y_n(x) &= -(-x)^n\left(\frac{1}{x}\diff{}{x}\right)^{n}\frac{\cos x}{x}
+    \xrightarrow[x \rightarrow \infty]{}\frac{-\cos(x - \tfrac{\pi}{2}n)}{x}.
+\end{align*}
+:::::
+
+:::{margin}
+Strictly speaking, we need $rV(r) \rightarrow 0$ as $r \rightarrow \infty$.  Note that
+this famously excludes the Coulomb potential, which is "long ranged" and has infinite
+cross-section.
+:::
 Far from the potential where $V(r) \approx 0$, this can be expressed in terms of the
-[spherical Bessell functions][], which solve
+[spherical Bessel functions][] $j_{l}(kr)$ and $y_{l}(kr)$:
 \begin{gather*}
-  r^2 y'' + 2r y + (r^2 - n(n+1))y = 0,\\
+  \psi(\vect{r}) = \sum_{lm} \Bigl(
+    A_{lm} j_{l}(kr) + B_{lm} y_{l}(kr)
+  \Bigr) Y^{m}_{l}(\theta, \phi).
 \end{gather*}
+Using the asymptotic forms, this becomes
+\begin{gather*}
+  \psi(\vect{r}) \xrightarrow[r \rightarrow \infty]{} 
+  \sum_{lm} \Bigl(
+    A_{lm} \frac{\sin(kr - \tfrac{\pi}{2}l)}{kr} 
+    - B_{lm} \frac{\cos(kr - \tfrac{\pi}{2}l)}{kr}
+  \Bigr) Y^{m}_{l}(\theta, \phi).
+\end{gather*}
+An outgoing (scattered) wave should have the form $e^{\I kr}/kr$, and therefor must have
+$A_{lm} = -\I B_{lm}$:
+\begin{gather*}
+  \psi_{sc}(\vect{r}) \xrightarrow[r \rightarrow \infty]{}
+  \frac{e^{\I kr}}{r}
+  \underbrace{
+    \frac{1}{k}
+    \sum_{lm} \overbrace{(-\I)^{l}}^{e^{-\I\pi l/2}} A_{lm} Y^{m}_{l}(\theta, \phi)
+  }_{f(\theta, \phi)}
+  = \frac{e^{\I kr}}{r}f(\theta, \phi).
+\end{gather*}
+The full scattering problem can thus be expressed as
+\begin{gather*}
+  \psi(\vect{r}) \xrightarrow[r \rightarrow \infty]{}
+  e^{\I k z} + f(\theta, \phi)\frac{e^{\I kr}}{r}.
+\end{gather*}
+
+
+
+
+
+
 
 
 
@@ -474,3 +562,4 @@ Far from the potential where $V(r) \approx 0$, this can be expressed in terms of
 [harmonic oscillator]: <https://en.wikipedia.org/wiki/Quantum_harmonic_oscillator>
 
 [spherical Bessel functions]: <https://en.wikipedia.org/wiki/Bessel_function#Spherical_Bessel_functions:_jn,_yn>
+[optical theorem]: <https://en.wikipedia.org//wiki/Optical_theorem>
