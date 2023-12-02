@@ -38,9 +38,9 @@ dependencies:
     - sphinxcontrib-zopeext     # Documentation of interfaces (mine)
     - sphinx-autobuild          # Automatically build and serve (make doc-server)
     - sphinx-comments # Hypothes.is comments and annotations
-    - sphinxcontrib-bibtex>=2.4.0
+    - sphinxcontrib-bibtex>=2.6.1
     # https://github.com/executablebooks/sphinx-jupyterbook-latex/issues/97
-    - sphinx-jupyterbook-latex
+    - sphinx-jupyterbook-latex[myst]
 
     - ipywidgets
     - black

@@ -59,7 +59,6 @@ References
 ==========
 
 ```{bibliography}
-:style: alpha
 ```
 
 (sec:linear_algebra_resources)=

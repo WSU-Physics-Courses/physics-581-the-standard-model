@@ -30,7 +30,7 @@ long-range Coulomb potential:
 
 \begin{gather*}
   \left(
-    \frac{\hbar^2}{2\mu}
+    \frac{\hbar^2}{2m}
       \left(-\diff[2]{}{r} + \frac{\nu^2 - 1/4}{r^2}\right)
   + V(r)\right) u(r) = E u(r),\\
   u(r) = r^{(d-1)/2}\psi(r), \qquad
@@ -43,7 +43,7 @@ where $l=0$ so that $\nu^2 - 1/4 = 0$.  The radial wavefunctions $u(r)$ thus sat
 1D Schrödinger equation: 
 \begin{gather*}
   \braket{r|\op{H}|u} = \underbrace{
-      \left(\frac{-\hbar^2}{2\mu}\diff[2]{}{r} + V(r)\right)
+      \left(\frac{-\hbar^2}{2m}\diff[2]{}{r} + V(r)\right)
   }_{\op{H}} \underbrace{u(r)}_{\ket{u}} = E u(r),
   \qquad
   u(0) = 0, \qquad u(\infty) = 0.
@@ -309,7 +309,7 @@ $u(0) = u(R) = 0$.
 Using an appropriate approximation for the derivative one can form the matrix for the
 Hamiltonian $\mat{H}$:
 \begin{gather*}
-   \mat{H} = \frac{-\hbar^2}{2\mu a^2} \mat{D}_2 + \mat{V}, \qquad
+   \mat{H} = \frac{-\hbar^2}{2m a^2} \mat{D}_2 + \mat{V}, \qquad
    \mat{V} = \diag(\vect{V}),
 \end{gather*}
 where $\mat{V}$ is a diagonal matrix with $[\vect{V}]_n = V(r_n)$ being the potential
@@ -325,7 +325,7 @@ Another closely related method is due to [Numerov][Numerov's method].  This give
 order $O(a^4)$ approximation, but at the expense of complicating the potential and
 turning the problem into a generalized eigenvalue problem:
 \begin{gather*}
-  \left(\frac{-\hbar^2\mat{D}_2}{2\mu a^2} + \mat{I}\mat{V}\right)\ket{u} =
+  \left(\frac{-\hbar^2\mat{D}_2}{2m a^2} + \mat{I}\mat{V}\right)\ket{u} =
   \mat{I}\ket{u}E,\qquad
   \mat{I} = \frac{1}{12}
   \begin{pmatrix}
@@ -492,15 +492,15 @@ plane waves.  The $\theta$ dependence is more complicated due to the coordinate 
 For testing we use the exact energies for the non-relativistic [hydrogen atom][]:
 \begin{gather*}
   V(r) = \frac{-\alpha}{r}, \qquad
-  E_{l,n} = \frac{-\mu\alpha^2/\hbar^2}{2(1+l+n)^2}.
+  E_{l,n} = \frac{-m\alpha^2/\hbar^2}{2(1+l+n)^2}.
 \end{gather*}
 The eigenstates can also be expressed analytically:
 \begin{gather*}
   \psi_{n,l,m}(r, \theta, \phi) \propto e^{r/na}\left(\frac{2r}{na}\right)^{l}
   L_{n-l-1}^{2l+1}\left(\frac{2r}{na}\right)Y_{l}^{m}(\theta, \phi), \qquad
-  a = \frac{\hbar^2}{\mu \alpha},
+  a = \frac{\hbar^2}{m \alpha},
 \end{gather*}
-where $\mu$ is the reduced mass $\mu = m_em_p/(m_e+m_p)$, $a$ is the [reduced Bohr
+where $m$ is the reduced mass $m = m_em_p/(m_e+m_p)$, $a$ is the [reduced Bohr
 radius][], $L_{n-l-1}^{2l+1}(\rho)$ is a [generalized Laguerre polynomial][] of degree 
 $n-l-1$, and $Y_{l}^{m}(\theta, \phi)$ is a [spherical harmonic][] function of degree 
 $l$ and order $m$.
@@ -570,7 +570,6 @@ states (because our box gets too small), and about 4 places of accuracy, even wi
 of points.
 
 For high accuracy, we probably need to shoot, or be clever.
-
 
 [Bessel function]: <https://en.wikipedia.org/wiki/Bessel_function>
 [Bohr radius]: <https://en.wikipedia.org/wiki/Bohr_radius>

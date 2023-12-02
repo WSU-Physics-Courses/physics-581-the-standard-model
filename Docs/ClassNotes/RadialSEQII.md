@@ -36,15 +36,15 @@ plane waves.  The $\theta$ dependence is more complicated due to the coordinate 
 For testing we use the exact energies for the non-relativistic [hydrogen atom][]:
 \begin{gather*}
   V(r) = \frac{-\alpha}{r}, \qquad
-  E_{l,n} = \frac{-\mu\alpha^2/2\hbar^2}{2(1+l+n)^2}.
+  E_{l,n} = \frac{-m\alpha^2/2\hbar^2}{2(1+l+n)^2}.
 \end{gather*}
 The eigenstates can also be expressed analytically:
 \begin{gather*}
   \psi_{n,l,m}(r, \theta, \phi) \propto e^{r/na}\left(\frac{2r}{na}\right)^{l}
   L_{n-l-1}^{2l+1}\left(\frac{2r}{na}\right)Y_{l}^{m}(\theta, \phi), \qquad
-  a = \frac{\hbar^2}{\mu \alpha},
+  a = \frac{\hbar^2}{m \alpha},
 \end{gather*}
-where $\mu$ is the reduced mass $\mu = m_em_p/(m_e+m_p)$, $a$ is the [reduced Bohr
+where $m$ is the reduced mass $m = m_em_p/(m_e+m_p)$, $a$ is the [reduced Bohr
 radius][], $L_{n-l-1}^{2l+1}(\rho)$ is a [generalized Laguerre polynomial][] of degree 
 $n-l-1$, and $Y_{l}^{m}(\theta, \phi)$ is a [spherical harmonic][] function of degree 
 $l$ and order $m$.
