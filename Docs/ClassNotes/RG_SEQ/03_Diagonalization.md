@@ -27,30 +27,112 @@ Diagonalizing the Radial Schrödinger Equation
 Here we continue our previous explorations of numerical methods for solving the radial
 Schrödinger Equation, trying to overcome some of the shortcomings seen there.  We will
 focus on problems with a Coulomb potential that has both the mild singularity at $r=0$
-and the long tail $V \sim 1/r$.
+and the long tail $V \sim 1/r$:
+\begin{gather*}
+  \Biggl(
+    \frac{-\hbar^2}{2m}\biggl(\diff[2]{}{r} + \frac{l(l+1)}{r^2}\biggr) + V(r) - E
+  \Biggr)u(r) = 0.
+\end{gather*}
+
+:::{margin}
+Note that we can choose units where $\alpha = \hbar = m = 1$ so that
+\begin{gather*}
+  1 = \underbrace{a = \frac{\hbar^2}{m\alpha}}_{\text{length}}
+    = \underbrace{\frac{\alpha}{l}}_{\text{energy}}.
+\end{gather*}
+There are no dimensionless parameters in this theory.
+:::
+## Coulomb Potential
 
 For testing we use the exact energies for the non-relativistic [hydrogen atom][]:
 \begin{gather*}
   V(r) = \frac{-\alpha}{r}, \qquad
-  E_{l,n} = \frac{-m\alpha^2/2\hbar^2}{2(1+l+n)^2}.
-\end{gather*}
-The eigenstates can also be expressed analytically:
-\begin{gather*}
-  \psi_{n,l,m}(r, \theta, \phi) \propto e^{r/na}\left(\frac{2r}{na}\right)^{l}
-  L_{n-l-1}^{2l+1}\left(\frac{2r}{na}\right)Y_{l}^{m}(\theta, \phi), \qquad
-  a = \frac{\hbar^2}{m \alpha},
+  E_{ln} = \frac{-m\alpha^2/\hbar^2}{2(1+l+n)^2} = \frac{-\hbar^2}{2ma^2(1+l+n)^2},\\
+  u_{ln}(r) = \sqrt{\left(\frac{2}{na}\right)^3\frac{(n-l-1)!}{2n(n+l)!}}
+              re^{-r/na}
+              \left(\frac{2r}{na}\right)^{l}
+              L_{n-l-1}^{2l+1}\left(\frac{2r}{na}\right), \\
+  a = \frac{\hbar^2}{m \alpha},\qquad
+  L_{n}^{\alpha}(x) = \frac{x^{-\alpha}}{n!}\left(\diff{}{x} - 1\right)^{n}x^{n+\alpha}.
 \end{gather*}
 where $m$ is the reduced mass $m = m_em_p/(m_e+m_p)$, $a$ is the [reduced Bohr
 radius][], $L_{n-l-1}^{2l+1}(\rho)$ is a [generalized Laguerre polynomial][] of degree 
 $n-l-1$, and $Y_{l}^{m}(\theta, \phi)$ is a [spherical harmonic][] function of degree 
-$l$ and order $m$.
+$l$ and order $m$. The full 3D eigenstates are:
+\begin{gather*}
+  \psi_{n,l,m}(r, \theta, \phi) u_{nl}(r)Y_{l}^{m}(\theta, \phi).
+\end{gather*}
+The states in these formulae are classified by the following quantum numbers:
+* $n \in \{1, 2, 3, \dots\}$: [principal quantum number][],
+* $l \in \{0, 1, 2, \dots, n-1\}$: [azimuthal quantum number][].  These are sometimes
+  referred to by orbital terminology S ($l=0$), P ($l=1$), D ($l=2$) etc.  Here we focus
+  on the S-wave properties $l=0$ which are spherically symmetric.
+* $m \in \{-l, -l+1, \dots, l-1, l\}$: [magnetic quantum number][],
 
+Note: Orthogonality between different values of $l$ is enforced by the spherical
+harmonics.  The radial wavefunctions are orthogonal in the following sense:
+\begin{gather*}
+  \braket{u_{nl}|u_{ml}} = \int_0^{\infty} u_{nl}^{*}(r)u_{ml}(r)\d{r} = \delta_{mn}.
+\end{gather*}
+We now check these properties numerically.
+
+
+```{code-cell}
+:tags: [hide-input]
+
+from scipy.special import genlaguerre as L, factorial
+from scipy.integrate import quad
+
+class Coulomb:
+    m = alpha = hbar = 1
+    a = hbar**2/m/alpha
+
+    def get_u(self, r, n, l=0):
+        a = self.a
+        A = np.sqrt((2/n/a)**3*factorial(n-l-1)/2/n/factorial(n+l))
+        rho = 2*r/n/a
+        return A*r*np.exp(-rho/2)*rho**l*L(n-l-1, 2*l+1)(rho)
+
+    def get_E(self, n, l=0):
+        return -self.hbar**2/2/self.m/self.a**2/(1+l+n)**2
+
+coulomb = Coulomb()
+
+# Check orthonormality
+
+N = 10
+def f(r):
+    return (coulomb.get_u(r, n, l).conj() * coulomb.get_u(r, m, l))
+
+for n in range(1, N+1):
+    for m in range(1, n+1):
+        for l in range(min(m, n)):
+            res = quad(f, 0, np.inf)[0]
+            if m == n:
+                assert np.allclose(res, 1)
+            else:
+                assert np.allclose(res, 0)
+
+r = np.linspace(0, 60, 1000)[1:]
+fig, ax = plt.subplots()
+for l in range(3):
+    for n in range(l+1, 5):
+        u_r = coloumb.get_u(r, n=n, l=l)
+        ax.plot(r, u_r, ls=['-', '--', ':', '-.'][l], c=f"C{n}",
+                label=f"{n=}, {l=}")
+ax.set(xlabel="$r$", ylabel="$u(r)$") 
+ax.legend();
+```
 These exact solutions might be used to deal with the singular properties of the Coulomb
 potential, but we postpone discussing this for now in favour of more general
 techniques.
 
 ## Diagonalization
 
+Our diagonalization approach did not work very well before, most likely because of the
+singularities and long-range tail of the Coulomb potential.  One approach for dealing
+with this is to use the exact solutions above as a basis, and to expand any other
+terms.  This can work quite well, but computing the matrix elements 
 
 ```{code-cell} ipython3
 import scipy.linalg
@@ -112,7 +194,122 @@ states (because our box gets too small), and about 4 places of accuracy, even wi
 of points.
 
 
-### DVR Basis for the Radial Equation
+## Change of Basis
+
+:::{margin}
+I think of the basis functions $\phi_{n}(r)$ as a "unitary matrix" $[\mat{\phi}]_{rn}$ whose
+first index $r$ is continuous and whose second index $n$ is discrete.  This is unitary
+in the sense of
+\begin{gather*}
+  \mat{\phi}^\dagger \mat{\phi} = \sum_{r}[\mat{\phi}^\dagger]_{mr}[\mat{\phi}]_{rn}\\
+  = \int \d{r}\;w(r) \phi^*_{m}(r)\phi_{n}(r) = \delta_{mn}.
+\end{gather*}
+I.e.
+\begin{gather*}
+  \sum_{r} \equiv \int \d{r}\; w(r).
+\end{gather*}
+If the basis is complete, then we also have
+\begin{gather*}
+  \mat{\phi}\mat{\phi}^\dagger = \sum_{n}\phi_{n}(r)\phi^*_{n}(r') = \delta(r-r').
+\end{gather*}
+If the basis is finite, however, then this might only be true on some set of discrete
+abscissa $r_n$. Now we write:
+\begin{gather*}
+  \op{H}u(r) = u(r)E, \\
+  u(r) = \sum_{n}s_n\phi_{n}(r) = \mat{\phi}\ket{s},\\
+  \underbrace{\mat{\phi}^\dagger \op{H}\mat{\phi}}_{\mat{H}}\ket{s} 
+  = \mat{\phi}^\dagger\mat{\phi}\ket{s}E = \ket{s}E,\\
+  \mat{H}\mat{S} = \mat{S}\mat{E}.
+\end{gather*}
+:::
+A general strategy is to express the problem in an orthonormal basis $\ket{\phi_n}$ of
+functions $\phi_n(r) = \braket{r|\phi_n}$,
+\begin{gather*}
+  \braket{\phi_m|\phi_n} = \int\d{r}\; w(r) \phi_m^*(r)\phi_n(r) = \delta_{mn},
+\end{gather*}
+using an inner product with a weight function $w(r)$.  E.g., in spherical coordinates we
+might take $w(r) \propto r^2$.  One now simply computes the matrix elements of the
+Hamiltonian and diagonalize:
+\begin{gather*}
+  \braket{\phi_m|\op{H}|\phi_n} = [\mat{H}]_{mn}
+  = \int\d{r}\; w(r) \phi^*_m(r)
+  \Biggl(
+    \frac{-\hbar^2}{2m}\Bigl(\phi''_n(r) + \frac{l(l+1)}{r^2}\phi_n(r)\Bigr)
+    + V(r)\phi_n(r)
+  \Biggr),\\
+  \mat{H} = \mat{S}\mat{E}\mat{S}^{-1},\qquad
+  u_n(r) = \sum_{m}\phi_m(r)\mat{S}_{mn},
+\end{gather*}
+where $\mat{E} = \diag(E_0, E_1, \dots)$.  Depending on the complexity of the basis
+functions, the terms in this integral may be easier or harder to compute.
+
+An obvious application is to use the exact solutions to the Coulomb potential:
+\begin{gather*}
+  \op{H} = \op{H}_{C} + V_{s}(\op{r}).
+\end{gather*}
+Here we demonstrate this technique by computing the lowest 3 eigenvalues for
+\begin{gather*}
+  V(r) = \underbrace{\frac{-\alpha}{r}}_{V_C} + \underbrace{\frac{\alpha}{a}e^{-r^2/2a^2}}_{V_s}.
+\end{gather*}
+
+```{code-cell}
+coulomb = Coulomb()
+
+l = 0
+
+def get_V(r):
+    alpha, a = coulomb.a, coulomb.alpha
+    return alpha/a * np.exp(-(r/a)**2/2)
+
+N = 40
+V = np.zeros((N, N))
+ns = np.arange(1, N+1)
+
+# These loops are quite slow...
+for n in ns:
+    for m in range(n, N+1):
+        def f(r):
+            un = coulomb.get_u(r, n, l=l)
+            um = coulomb.get_u(r, m, l=l)
+            return um.conj()*get_V(r)*un
+        V[n-1, m-1] = V[m-1, n-1] = quad(f, 0, np.inf)[0]
+
+H0 = np.diag(coulomb.get_E(n=ns, l=l))
+H = H0 + V
+E_ = np.linalg.eigvalsh(H)
+
+Es = []
+N0 = 3
+Ns = 2**np.arange(1+int(np.log2(N0)), 1+int(np.log2(N)))
+Es = np.array([np.linalg.eigvalsh(H[:N, :N])[:N0] for N in Ns])
+fig, ax = plt.subplots()
+ax.loglog(Ns, abs(Es - E_[:N0]), '-+')
+ax.set(xlabel="$N$", ylabel="$E$ error", xticks=Ns);
+```
+
+We see that this basis does a reasonable job, but the integrals are quite expensive to
+compute.  For a one-off computation, this should work to generate some data for
+analysis.  *(Note: we have only crudely estimated the "correct" answers here by
+computing in a larger basis, so take the observed scaling with a grain of salt.)*
+
+## DVR Basis for the Radial Equation
+
+Another approach for diagonalization is to use a discrete variable representation
+([DVR][]) basis (sometimes called [pseudo-spectral methods][DVR]).  These can be
+constructed for any [orthogonal polynomials][] (see {cite}`Baye:1986si`) but some care
+is needed when applying these.
+
+The idea is define a set of $N$ basis functions $\phi_{n}(x)$ that are orthogonorma on
+some range $[a, b]$ with a weight function $w(x)$:
+\begin{gather*}
+  \int_{a}^{b}\d{x}\; w(x)\phi_m^*(x)\phi_n(x) = \delta_{mn}.
+\end{gather*}
+Additionally, we need a [quadrature rule][numerical integration] with $N$ points $x_i$
+and weights $w_i$ such that
+
+
+
+
 
 :::{margin}
 See {cite:p}`LC:2002` for details.  We follow most of the notations, except we use
@@ -335,3 +532,9 @@ E[:10].real
 [spherical harmonic]: <https://en.wikipedia.org/wiki/Spherical_harmonics>
 [finite difference methods]: <https://en.wikipedia.org/wiki/Finite_difference_method>
 [Dirichlet boundary conditions]: <https://en.wikipedia.org/wiki/Dirichlet_boundary_condition>
+[numerical integration]: <https://en.wikipedia.org/wiki/Numerical_integration>
+[DVR]: <https://en.wikipedia.org/wiki/Pseudo-spectral_method>
+[orthogonal polynomials]: <https://en.wikipedia.org/wiki/Orthogonal_polynomials>
+[principal quantum number]: <https://en.wikipedia.org/wiki/Principal_quantum_number>
+[azimuthal quantum number]: <https://en.wikipedia.org/wiki/Azimuthal_quantum_number>
+[magnetic quantum number]: <https://en.wikipedia.org/wiki/Magnetic_quantum_number>

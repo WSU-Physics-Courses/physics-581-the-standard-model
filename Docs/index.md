@@ -32,6 +32,7 @@ titlesonly:
 ---
 ClassNotes/RenormalizationGroup
 ClassNotes/RandomWalks
+ClassNotes/RenormalizingTheSEQ
 ```
 
 ```{toctree}

@@ -36,7 +36,7 @@ For testing we use the exact energies for the non-relativistic [hydrogen atom][]
 \end{gather*}
 The eigenstates can also be expressed analytically:
 \begin{gather*}
-  \psi_{n,l,m}(r, \theta, \phi) \propto e^{r/na}\left(\frac{2r}{na}\right)^{l}
+  \psi_{n,l,m}(r, \theta, \phi) \propto e^{-r/na}\left(\frac{2r}{na}\right)^{l}
   L_{n-l-1}^{2l+1}\left(\frac{2r}{na}\right)Y_{l}^{m}(\theta, \phi), \qquad
   a = \frac{\hbar^2}{m \alpha},
 \end{gather*}

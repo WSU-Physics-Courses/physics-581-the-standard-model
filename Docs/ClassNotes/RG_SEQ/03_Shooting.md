@@ -21,8 +21,8 @@ import logging;logging.getLogger('matplotlib').setLevel(logging.CRITICAL)
 import numpy as np, matplotlib.pyplot as plt
 ```
 
-Shooing the Radial Schrödinger Equation
-=======================================
+Shooting the Radial Schrödinger Equation
+========================================
 
 ## To Do
 
