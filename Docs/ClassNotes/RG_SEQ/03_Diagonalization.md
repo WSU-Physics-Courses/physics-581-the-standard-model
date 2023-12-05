@@ -117,7 +117,7 @@ r = np.linspace(0, 60, 1000)[1:]
 fig, ax = plt.subplots()
 for l in range(3):
     for n in range(l+1, 5):
-        u_r = coloumb.get_u(r, n=n, l=l)
+        u_r = coulomb.get_u(r, n=n, l=l)
         ax.plot(r, u_r, ls=['-', '--', ':', '-.'][l], c=f"C{n}",
                 label=f"{n=}, {l=}")
 ax.set(xlabel="$r$", ylabel="$u(r)$") 
