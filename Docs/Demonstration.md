@@ -28,18 +28,17 @@ JupyterBook Demonstration
 This document demonstrates some of the features provided by the documentation.  It can
 serve as a starting point for your own documentation.
 
-
-This documentation is formatted using an extension to [Markdown] called [MyST] which
-allows full interoperability with [Sphinx], the system used to build the documentation.
+This documentation is formatted using an extension to [Markdown][] called [MyST][] which
+allows full interoperability with [Sphinx][], the system used to build the documentation.
 Here we demonstrate some features.  For more details, please see:
 
-* [Jupyter Book]
-* [Jupyter Book with Sphinx]
-* [MyST Cheatsheet]
+* [Jupyter Book][]
+* [Jupyter Book with Sphinx][]
+* [MyST Cheatsheet][]
 
 ## Math
 
-You can use LaTeX math with [MathJaX]:
+You can use LaTeX math with [MathJaX][].
 
 ### Example
 Here we implement a simple example of a pendulum of mass $m$ hanging down distance $r$
@@ -74,21 +73,33 @@ equilibrium position:
 \end{gather*}
 
 ```{note}
-On [CoCalc], only a subset of the math will render in the live Markdown editor.  This
-uses [KaTeX], which is much faster than [MathJaX], but more limited.  The final
-documentation will use [MathJaX], and loads the macros defined in
+On [CoCalc][], only a subset of the math will render in the live Markdown editor.  This
+uses [KaTeX][], which is much faster than [MathJaX][], but more limited.  The final
+documentation will use [MathJaX][], and loads the macros defined in
 `Docs/_static/math_defs.tex`.
 ```
 
+### SI Units
+
+In LaTeX, I like to use the [siunitx][] package.  This is not currently supported in
+MathJax (they [could not get funding](https://github.com/mathjax/MathJax/issues/447)),
+but can be mocked up with [some defines](https://github.com/KaTeX/KaTeX/issues/817).
+The idea is that we use the macros for HTML, but substitute the appropriate
+`\usepackage{siunitx}` in the LaTeX files. *(This second step is currently not implemented)*
+
+:::{admonition] To Do: Add a mechanism for different MathJaX vs LaTeX defines.
+:::
+
 [math]: <https://jupyterbook.org/content/math.html>
 [KaTeX]: <https://katex.org/>
+[siunitx]: <https://ctan.org/pkg/siunitx>
 
 ## Jupyter Notebooks
 
-This document is actually a [Jupyter] notebook, synchronized with [Jupytext].  The top
+This document is actually a [Jupyter][] notebook, synchronized with [Jupytext][].  The top
 of the document contains information about the kernel that should be used etc.  These
-are parsed using [MyST-NB] and the output of cells will be displayed.  For example, here
-is a plot demonstrating [Liouville's Theorem].
+are parsed using [MyST-NB][] and the output of cells will be displayed.  For example, here
+is a plot demonstrating [Liouville's Theorem][].
 
 ```{code-cell}
 :tags: [hide-input, full-width]
@@ -207,15 +218,130 @@ This indicates that it is a code cell, to be run with python 3, and has some
 output full width, but hiding the code.  (There is a link to click to show the code.)
 `````
 
-If you need more control, you can [glue] the output to a variable, then load it as a
+If you need more control, you can [glue][] the output to a variable, then load it as a
 proper figure, insert it in a table, etc.
 
 ## Manim
 
 
-Your project was generated from a template without Manim support.  To use, please
-regenerate the project with `use_manim = "yes"`.
-the 
+We provide experimental support for [Manim Community][] -- the community edition of the animation
+software used by the [3Blue1Brown](https://www.3blue1brown.com/) project.  Here we
+demonstrate an animation of the [Jacobi elliptic functions][].
+
+```{code-cell}
+:tags: [hide-cell]
+
+import manim.utils.ipython_magic
+```
+
+```{code-cell}
+:tags: [hide-input]
+
+%%manim -v WARNING --progress_bar None -qm JacobiEllipse
+from scipy.special import ellipj, ellipkinc
+from manim import *
+
+config.media_width = "100%"
+config.media_embed = True
+
+my_tex_template = TexTemplate()
+with open("_static/math_defs.tex") as f:
+    my_tex_template.add_to_preamble(f.read())
+
+def get_scd(phi, k):
+    m = k**2
+    u = ellipkinc(phi, m)
+    s, c, d, phi_ = ellipj(u, m)
+    return s, c, d
+
+def get_xyr(phi, k):
+    s, c, d = get_scd(phi, k)
+    r = 1/d
+    x, y = r*c, r*s
+    return x, y, r
+
+class JacobiEllipse(Scene):
+    def construct(self):
+        config["tex_template"] = my_tex_template
+        config["media_width"] = "100%"
+        class colors:
+            ellipse = YELLOW
+            x = BLUE
+            y = GREEN
+            r = RED
+            
+        phi = ValueTracker(0.01)
+        k = 0.8
+        axes = Axes(x_range=[0, 2*np.pi, 1], 
+                    y_range=[-2, 2, 1],
+                    x_length=6, 
+                    y_length=4,
+                    axis_config=dict(include_tip=False),
+                    x_axis_config=dict(numbers_to_exclude=[0]),
+                   ).add_coordinates()
+        
+        
+        plane = PolarPlane(radius_max=2).add_coordinates()
+
+        x = lambda phi: get_xyr(phi, k)[0]
+        y = lambda phi: get_xyr(phi, k)[1]
+        r = lambda phi: get_xyr(phi, k)[2]
+        
+        g_ellipse = plane.plot_polar_graph(r, [0, 2*np.pi], color=colors.ellipse)
+        
+        points_colors = [(x, colors.x), (y, colors.y), (r, colors.r)]
+        x_graph, y_graph, r_graph = [axes.plot(_x, color=_c) for _x, _c in points_colors]
+        graphs = VGroup(x_graph, y_graph, r_graph)
+        
+        dot = always_redraw(lambda:
+            Dot(plane.polar_to_point(r(phi.get_value()), phi.get_value()), 
+                fill_color=colors.ellipse, 
+                fill_opacity=0.8))
+
+        @always_redraw
+        def lines():
+            c2p = plane.coords_to_point
+            phi_ = phi.get_value()
+            x_, y_ = x(phi_), y(phi_)
+            return VGroup(
+                Line(c2p(0, 0), c2p(x_, 0), color=colors.x),
+                Line(c2p(0, y_), c2p(x_, y_), color=colors.x),
+                Line(c2p(0, 0), c2p(0, y_), color=colors.y),
+                Line(c2p(x_, 0), c2p(x_, y_), color=colors.y),
+                Line(axes.c2p(phi_, y_), c2p(x_, y_), color=colors.y),
+                Line(c2p(0, 0), c2p(x_, y_), color=colors.r),
+            ).set_opacity(0.8)
+
+        dots = always_redraw(lambda:
+            VGroup(*(Dot(axes.c2p(phi.get_value(), _x(phi.get_value())), fill_color=_c, fill_opacity=1)
+                     for _x, _c in points_colors)))
+
+        a_group = VGroup(axes, dots, graphs)
+        p_group = VGroup(plane, g_ellipse, dot, lines)
+        a_group.shift(RIGHT*2)
+        p_group.shift(LEFT*4)
+    
+        labels = VGroup(
+            axes.get_graph_label(
+                x_graph, label=r"x=\cn(u, k)", color=colors.x,
+                x_val=2.5, direction=DOWN).shift(0.2*LEFT),
+            axes.get_graph_label(
+                y_graph, label=r"y=\sn(u, k)", color=colors.y,
+                x_val=4.5, direction=DR),
+            axes.get_graph_label(
+                r_graph, label=r"r=1/\dn(u, k)", color=colors.r,
+                x_val=2, direction=UR),
+        )
+        #labels.next_to(a_group, RIGHT)
+        self.add(p_group, a_group, labels)
+        self.play(phi.animate.set_value(2*np.pi), run_time=5, rate_func=linear)
+```
+
+```{warning}
+We need a Manim >= 0.15.0 to get this to work, resolving [issue
+2441](https://github.com/ManimCommunity/manim/issues/2441) by embeding the video in the
+output.
+```
 
 
 [Manim Community]: <https://www.manim.community/>

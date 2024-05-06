@@ -2,48 +2,50 @@ name: phys-581
 channels:
   - defaults
 dependencies:
-  - python>=3.9
+  - python>=3.9,<3.12
 
-  # Core dependencies
-  - scipy
-  - matplotlib
-  - sympy
-  - ipykernel
-  #- conda-forge::jupyter_console
-
+  # Required conda dependencies (cookiecutter.conda_dependencies)
   # Documentation
-  - jupytext
   - pandoc
-  - notebook
-  - conda-forge::jupyter_nbextensions_configurator    
-  
-  # Pip-only dependencies
+  - pycairo  # Needed by manim
+  - pango    # Needed by manim
+  #- manimpango    # Needed by manim
+  #- ffmpeg   # Needed by manim
+
+  # Pip dependencies
   - pip
   - pip:
-    - mmf_setup
+    - ipykernel
+    - mmf-setup
+    #- ruamel-yaml
+
+    # Pip dependencies (cookiecutter.pip_dependencies)
+    - mmf-setup
+
+
 
     # Testing
     - pytest-cov
     - pytest-flake8
     - pytest-html
     - pytest-xdist
-    #- sphinx>=7.0.1             # Main documentation system
+    #- sphinx>=7.0.1            # Main documentation system - will be pulled in by others
     #- myst-parser>=2.0.0        # Support for MyST .md files. Provided by myst-nb
     - myst-nb>=0.17.2           # Support for notebooks as MyST .md files.
     - sphinx-design>=0.4.1      # Responsive web design
     - sphinx-book-theme>=1.0.1  # Main documentation theme.
     - sphinx-comments           # Hypothes.is comments and annotations
     - sphinxext-opengraph       # Provides Open Graph Metadata on pages (summaries)
-    - sphinx-togglebutton       # 
-    - sphinxcontrib-zopeext     # Documentation of interfaces (mine)
+    - sphinx-togglebutton>=0.3.2
+    - sphinx-design>=0.5.0
+    - sphinxcontrib-zopeext>=0.4.3  # Documentation of interfaces (mine)
+    - sphinxcontrib-bibtex>=2.3.0
     - sphinx-autobuild          # Automatically build and serve (make doc-server)
     - sphinx-comments # Hypothes.is comments and annotations
     - sphinxcontrib-bibtex>=2.4.0
     # https://github.com/executablebooks/sphinx-jupyterbook-latex/issues/97
-    - sphinx-jupyterbook-latex    
-
-    - sphobjinv  # Helps looking up intersphinx references
-    - mmf-setup
-    - ruamel-yaml
+    - sphinx-jupyterbook-latex
+    - manim>=0.15.0
     # The current project, and dependencies in pyproject.toml.
     - .
+    #- -e .                      # If you want an editable install.

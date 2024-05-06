@@ -20,13 +20,13 @@ research, or industry applications.
 
 ## TL;DR
 
-Clone this repository somewhere with [Anaconda Project][] and [Conda][] installed, then run
+Clone this repository and run
 
 ```bash
 make init
 ```
 
-This will generate a [Conda][] environment you can use to work with the project.  Once
+This will generate an environment you can use to work with the project.  Once
 this is done you can make the documentation, tests, etc. with commands like:
 
 ```bash
@@ -37,13 +37,10 @@ make doc-server
 ```
 
 The latter will host the documentation on https://localhost:8000 and auto-update when you
-make changes.
-
-These will use `anaconda-project run` to perform the various actions.  If you want to
-manually interact with the environment, then you can run:
+make changes. If you want to manually interact with the environment, then you can run:
 
 ```bash
-anaconda-project run shell
+make shell
 ```
 
 In this shell, you can directly run `pytest` for example.

@@ -6,13 +6,15 @@
 
 # -- Path setup --------------------------------------------------------------
 
-# If extensions (or modules to document with autodoc) are in another directory,
+# If extensions (or modules to document with napoleon) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
 from pathlib import Path
 import os.path
 import subprocess
+from urllib import request
+
 from sphinx.util.fileutil import copy_asset
 
 import mmf_setup
@@ -41,6 +43,13 @@ author = "Michael McNeil Forbes"
 release = "0.1"
 
 
+# Check if we are online.
+try:
+    request.urlopen("https://cdn.jsdelivr.net/", timeout=1)
+    online = True
+except request.URLError as err:
+    online = False
+
 # -- General configuration ---------------------------------------------------
 
 # Add any Sphinx extension module names here, as strings. They can be
@@ -48,31 +57,32 @@ release = "0.1"
 # ones.
 extensions = [
     "myst_nb",
-    "sphinx.ext.autodoc",
-    "sphinx.ext.autosummary",
     "sphinx.ext.coverage",
     "sphinx.ext.doctest",
     "sphinx.ext.ifconfig",
-    "sphinx.ext.intersphinx",
     "sphinx.ext.mathjax",
     "sphinx.ext.napoleon",
     "sphinx.ext.todo",
     "sphinx.ext.viewcode",
     "sphinxcontrib.bibtex",
-    "sphinxcontrib.zopeext.autointerface",
     "matplotlib.sphinxext.plot_directive",
+    # For documenting source code.
+    "sphinx.ext.napoleon",
+    "sphinx.ext.autosummary",
+    "sphinxcontrib.zopeext.autointerface",
     # From jupyterbook
     # "jupyter_book",
     # "sphinx_thebe",
     # "sphinx_external_toc",
-# 
     "sphinx_jupyterbook_latex",
-# 
     "sphinx_comments",  # Hypothes.is comments and annotations
     "sphinx_design",
     "sphinx_togglebutton",
     # "recommonmark",
 ]
+
+if online:
+    extensions.append("sphinx.ext.intersphinx")
 
 # Make sure that .rst comes first or autosummary will fail.  See
 # https://github.com/sphinx-doc/sphinx/issues/9891
@@ -327,7 +337,7 @@ def my_init(app):
     run init` as normal, this will create a **whole new conda environment** and install
     the kernel from there.
     """
-    mathjax_offline = False
+    mathjax_offline = not online
     if on_rtd:
         subprocess.check_call(
             [
@@ -347,6 +357,12 @@ def my_init(app):
         print("Not On RTD!")
         ROOT = str(Path(__file__).parent.parent)
         subprocess.check_call(["make", "-C", ROOT, "init"])
+
+        # Check if we can access the MathJaX CDN.  If not, fallback to local files.
+        try:
+            request.urlopen("https://cdn.jsdelivr.net/", timeout=1)
+        except request.URLError as err:
+            mathjax_offline = True
 
     if mathjax_offline:
         # For this to work, you need to put mathjax js files in Docs/_static/mathjax
@@ -373,15 +389,17 @@ def my_init(app):
         # https://gitlab.com/thomaswucher/sphinx-mathjax-offline/-/blob/master/sphinx-mathjax-offline/__init__.py
 
         ext_dir = os.path.dirname(os.path.abspath(__file__))
-        mathjax_dir = ext_dir + "_static/mathjax"
+        mathjax_dir = os.path.join(ext_dir, "_static", "mathjax")
         copy_asset(mathjax_dir, os.path.join(app.outdir, "_static", "mathjax"))
         app.config.mathjax_path = "mathjax/tex-chtml.js"
         app.config.mathjax_path = "mathjax/tex-svg.js"
         app.config.mathjax_path = "mathjax/tex-chtml.js?config=TeX-AMS-MML_HTMLorMML"
+        app.config.mathjax_path = "mathjax/tex-chtml.js"
 
         # I don't know why this is needed, but if it is not turned off, then
         # "mathjax_ignore" is added to the top-level class, preventing local rendering.
         app.config.myst_update_mathjax = False
+        print(f"Using MathJaX Offline.  Make sure it is installed in {mathjax_dir}")
 
 
 def setup(app):
