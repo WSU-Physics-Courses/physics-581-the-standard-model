@@ -426,6 +426,40 @@ axr.set(ylim=(-50, 9), xlabel="$\kappa r$", ylabel="$V(r)/E_b$")
 ax.legend();
 ```
 
+## 1D Scattering
+
+:::{margin}
+This requirement can be loosened to requiring
+\begin{gather*}
+  \int_{-\infty}^{\infty}\d{x}(1+x^2)V(x) < \infty. 
+\end{gather*}
+:::
+For a different perspective, we now consider scattering in 1D.  We consider scattering
+off of a potential $V(x)$ that has compact support about the origin $V(x) = 0$ for
+$\abs{x}>R$.  We then write 
+\begin{gather*}
+  \psi(x) = \begin{cases}
+    e^{\I k x} +  R(k) e^{-\I kx} & x < -R,\\
+    T(k) e^{\I k x} & x > R.
+  \end{cases}
+\end{gather*}
+This corresponds to an incoming plane wave with momentum $k$ reflecting off the barrier
+with reflection coefficient $R(k)$ and transmission coefficient $T(k)$.  Conservation of
+probability requires
+\begin{gather*}
+  \abs{R_k}^2 + \abs{T_k}^2 = 1.
+\end{gather*}
+In addition to the **scattering states**, the potential may support a finite number of
+**bound states** with energy
+\begin{gather*}
+  E_n = - \frac{\hbar^2 \kappa_n^2}{2m}.
+\end{gather*}
+
+
+
+
+
+
 ## General Scattering
 
 Recall that the Schrödinger equation has the following form in spherical coordinates:

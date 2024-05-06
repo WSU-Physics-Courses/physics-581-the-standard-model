@@ -38,29 +38,33 @@ and the long tail $V \sim 1/r$:
 Note that we can choose units where $\alpha = \hbar = m = 1$ so that
 \begin{gather*}
   1 = \underbrace{a = \frac{\hbar^2}{m\alpha}}_{\text{length}}
-    = \underbrace{\frac{\alpha}{l}}_{\text{energy}}.
+    = \underbrace{\frac{\alpha}{l}}_{\text{energy}},\\
+  E_{ln} = \frac{-1}{2n^2}.
 \end{gather*}
-There are no dimensionless parameters in this theory.
+There are no dimensionless parameters in this theory.  The [principal quantum number][]
+$n = n_r + l + 1$ where $n_r$ is the number of nodes in the wavefunction.  The quantum
+number $n_r \in \{0, 1, \cdots\}$ is the usual label with $n_r =0$ being the
+lowest-energy state with fixed $l$.
 :::
 ## Coulomb Potential
 
 For testing we use the exact energies for the non-relativistic [hydrogen atom][]:
 \begin{gather*}
   V(r) = \frac{-\alpha}{r}, \qquad
-  E_{ln} = \frac{-m\alpha^2/\hbar^2}{2(1+l+n)^2} = \frac{-\hbar^2}{2ma^2(1+l+n)^2},\\
+  E_{ln} = \frac{-m\alpha^2/\hbar^2}{2n^2} = \frac{-\hbar^2}{2ma^2n^2},\\
   u_{ln}(r) = \sqrt{\left(\frac{2}{na}\right)^3\frac{(n-l-1)!}{2n(n+l)!}}
               re^{-r/na}
               \left(\frac{2r}{na}\right)^{l}
-              L_{n-l-1}^{2l+1}\left(\frac{2r}{na}\right), \\
+              L_{n-l-1}^{(2l+1)}\left(\frac{2r}{na}\right),\\
   a = \frac{\hbar^2}{m \alpha},\qquad
-  L_{n}^{\alpha}(x) = \frac{x^{-\alpha}}{n!}\left(\diff{}{x} - 1\right)^{n}x^{n+\alpha}.
+  L_{n}^{(\alpha)}(x) = \frac{x^{-\alpha}}{n!}\left(\diff{}{x} - 1\right)^{n}x^{n+\alpha}.
 \end{gather*}
 where $m$ is the reduced mass $m = m_em_p/(m_e+m_p)$, $a$ is the [reduced Bohr
-radius][], $L_{n-l-1}^{2l+1}(\rho)$ is a [generalized Laguerre polynomial][] of degree 
+radius][], $L_{n-l-1}^{(2l+1)}(\rho)$ is a [generalized Laguerre polynomial][] of degree 
 $n-l-1$, and $Y_{l}^{m}(\theta, \phi)$ is a [spherical harmonic][] function of degree 
 $l$ and order $m$. The full 3D eigenstates are:
 \begin{gather*}
-  \psi_{n,l,m}(r, \theta, \phi) u_{nl}(r)Y_{l}^{m}(\theta, \phi).
+  \psi_{n,l,m}(r, \theta, \phi) = u_{nl}(r)Y_{l}^{m}(\theta, \phi).
 \end{gather*}
 The states in these formulae are classified by the following quantum numbers:
 * $n \in \{1, 2, 3, \dots\}$: [principal quantum number][],
@@ -76,8 +80,7 @@ harmonics.  The radial wavefunctions are orthogonal in the following sense:
 \end{gather*}
 We now check these properties numerically.
 
-
-```{code-cell}
+```{code-cell} ipython3
 :tags: [hide-input]
 
 from scipy.special import genlaguerre as L, factorial
@@ -123,6 +126,7 @@ for l in range(3):
 ax.set(xlabel="$r$", ylabel="$u(r)$") 
 ax.legend();
 ```
+
 These exact solutions might be used to deal with the singular properties of the Coulomb
 potential, but we postpone discussing this for now in favour of more general
 techniques.
@@ -132,7 +136,7 @@ techniques.
 Our diagonalization approach did not work very well before, most likely because of the
 singularities and long-range tail of the Coulomb potential.  One approach for dealing
 with this is to use the exact solutions above as a basis, and to expand any other
-terms.  This can work quite well, but computing the matrix elements 
+terms.  This can work quite well, but computing the matrix elements
 
 ```{code-cell} ipython3
 import scipy.linalg
@@ -252,7 +256,7 @@ Here we demonstrate this technique by computing the lowest 3 eigenvalues for
   V(r) = \underbrace{\frac{-\alpha}{r}}_{V_C} + \underbrace{\frac{\alpha}{a}e^{-r^2/2a^2}}_{V_s}.
 \end{gather*}
 
-```{code-cell}
+```{code-cell} ipython3
 coulomb = Coulomb()
 
 l = 0
@@ -292,24 +296,383 @@ compute.  For a one-off computation, this should work to generate some data for
 analysis.  *(Note: we have only crudely estimated the "correct" answers here by
 computing in a larger basis, so take the observed scaling with a grain of salt.)*
 
-## DVR Basis for the Radial Equation
+**To Do:**
+* Demonstrate how to use [Numba][] or similar to speed the computation of the overlap
+  integrals so this method becomes feasible.
+* Maybe formally study convergence.
+
+
+## DVR Basis
 
 Another approach for diagonalization is to use a discrete variable representation
-([DVR][]) basis (sometimes called [pseudo-spectral methods][DVR]).  These can be
-constructed for any [orthogonal polynomials][] (see {cite}`Baye:1986si`) but some care
-is needed when applying these.
+([DVR][]) basis (sometimes called [pseudo-spectral methods][DVR]). These can be
+constructed for any [orthogonal polynomials][] (see {cite}`Baye:1986si`), but we start
+with the basic formalism, which can also be applied to other orthonormal basis sets,
+like the Fourier basis.
 
-The idea is define a set of $N$ basis functions $\phi_{n}(x)$ that are orthogonorma on
-some range $[a, b]$ with a weight function $w(x)$:
+:::{margin}
+Slightly more generally, we can define the inner-product in terms of a
+[Lebesque-Stieltjes integral][] with a measure $\alpha(x)$, which is any non-decreasing
+function on the real numbers $\alpha: \mathbb{R} \mapsto \mathbb{R}$:
 \begin{gather*}
-  \int_{a}^{b}\d{x}\; w(x)\phi_m^*(x)\phi_n(x) = \delta_{mn}.
+  \braket{P_m|P_n} = \int P_m^*(x)P_n(x) \d{\alpha(x)}.
 \end{gather*}
-Additionally, we need a [quadrature rule][numerical integration] with $N$ points $x_i$
-and weights $w_i$ such that
+The relationship to the **weight function** $w(x)$ is $\d{\alpha(x)} = w(x)\d{x}$:
+i.e. $w(x) = \alpha'(x)$.  For example, the [Lebesque-Stieltjes][Lebesque-Stieltjes integral]
+with $\alpha(x) = \Theta(x)$ rigorously defines what we mean by a Dirac delta function weight
+$w(x) = \delta(x)$.
+:::
+To construct a DVR basis, one needs two ingredients:
+1. A set of $N$ orthonormal basis functions $P_n(x)$.
+2. An $N$-point [Gaussian quadrature][] rule exact for all linear and quadratic products
+   of the basis functions.
+   
+Orthonormality is defined with respect to an inner product
+\begin{gather*}
+  \braket{P_m|P_n} = \int\d{x}\; w(x)P_m^*(x)P_n(x) = \delta_{mn},
+\end{gather*}
+and the $N$-point quadrature rule consists of $N$ points $x_i$ and weights $w_i$ such
+that
+\begin{gather*}
+  \int \d{x}\; w(x)f(x) = \sum w_i f(x_i).
+\end{gather*}
+For a DVR basis, we need this quadrature formula to be exact for:
+1. The functions: $P_n(x)$.
+2. Products: $P_m^*(x)P_n(x)$.
+3. Products with an additional factor of $x$: $xP_m^*(x)P_n(x)$.  *(This is not strictly
+   needed, but ensures that keeping the potential diagonal works reasonably well.)*
+
+This will be the case for the [orthogonal polynomials][], which is why we use the notation
+$P_n(x)$, but also holds for the Fourier basis and some other sets with appropriately
+chosen quadrature rules.
+
+:::{margin}
+To compare with the literature, note that {cite}`Schneider:2004` uses the notation
+$u_n(x) = \sqrt{w(x)}F_n(x)$ so that expectation values are simple
+\begin{gather*}
+  \braket{u_m|A(x)|u_n} = \int \d{x}\; u_m^*(x) A(x) u_n(x).
+\end{gather*}
+This is convenient for numerical work.
+
+In the notation of {cite}`LCCMP:2002`, $K_m = 1/w_m$.  They use the following three functions,
+which differ only by normalization:
+\begin{gather*}
+  \Delta_n(x) = \sqrt{K_n}F_n(x) = K_n L_n(x),\\
+  \frac{\braket{\Delta_m|\Delta_n}}{K_m} =
+  \braket{F_m|F_n} = K_m\braket{L_m|L_n} = \delta_{mn}\\
+  \frac{\Delta_{m}(x_n)}{K_{m}} = 
+  \frac{F_{m}(x_n)}{\sqrt{K_m}} =
+  L_{m}(x_n) = \delta_{mn}.
+\end{gather*}
+:::
+From these ingredients, we construct a set of **coordinate basis functions** $F_n(x)$
+that are **local** in the sense that $F_n(x_m)$ vanishes unless $m=n$, and that are
+orthonormal with respect to the coordinate $x$:
+\begin{gather*}
+  F_m(x) = \sum_{n} c_{mn}P_n(x), \qquad
+  F_m(x_n) = f_m\delta_{mn}, \\
+  \braket{F_m|F_n} = \delta_{mn}, \qquad
+  \braket{F_m|x|F_n} = x_m\delta_{mn}.
+\end{gather*}
+Using the orthonormality and evaluating the integrals with the quadrature rule, these
+properties give the relationship:
+\begin{gather*}
+  c_{mn} = \int \d{x}\; w(x) P_{n}^*(x)F_{m}(x)
+         = \sum_{i} w_i P_{n}^*(x_i)F_{m}(x_i)
+         = w_m P_{n}^*(x_m)f_m,\\
+  \delta_{mn} = \int \d{x}\; w(x) F_m^*(x)F_n(x)
+              = \sum_{i} w_i F_m^*(x_i)F_n(x_i) 
+              = w_m \abs{f_m}^2.
+\end{gather*}
+These can be solved, taking $f_m$ to be real:
+\begin{gather*}
+  f_m = \frac{1}{\sqrt{w_m}}, \qquad
+  c_{mn} = \sqrt{w_m}P_{n}^*(x_m), \qquad
+  F_{m}(x) = \sqrt{w_m}\sum_{n}P_{n}^*(x_m)P_n(x).
+\end{gather*}
+If the last quadrature condition is satisfied, then we have $\braket{F_m|x|F_n} =
+x_m\delta_{mn}$, which gets to the essence of these basis, that the potential can be
+expressed as a diagonal matrix:
+\begin{gather*}
+  [\mat{V}]_{mn} = \braket{F_m|V(x)|F_n} = V(x_m)\delta_{mn}.
+\end{gather*}
+To compute the kinetic energy, we must include factors of $\sqrt{w(x)}$ in the basis
+functions:
+\begin{gather*}
+  u_n(x) = \sqrt{w(x)}F_{n}(x).
+\end{gather*}
+Then, the kinetic energy can be evaluated using integration by parts and the quadrature
+rule.  See below for details.
+
+### Orthogonal Polynomials
+:::{margin}
+The integral $\int \d{\alpha(x)}$ is a [Lebesque-Stieltjes integral] with measure
+$\alpha(x)$, which should be a non-decreasing function on the reals. More commonly, we
+write $\d{\alpha(x)} = w(x)\d{x}$ where $w(x) = \alpha'(x)$ is called the **weight
+function**, but this is less general/more ambiguous.  E.g. $\alpha(x) = \Theta(x)$
+rigorously defines what we mean by a Dirac delta function $w(x) = \delta(x)$.
+:::
+One way of constructing a DVR basis is from a set of $N$ polynomials $P_n(x)$ (i.e. of
+maximum degree $N-1$) that are orthonormal with respect to a measure $\alpha(x)$:
+\begin{gather*}
+  \braket{P_m|P_n} = \int P_m(x)P_n(x) \d{\alpha(x)}.
+\end{gather*}
+An $N$-point [Gaussian quadrature][] rule is a set of $N$ points $x_i$ and weights $w_i$
+such that
+\begin{gather*}
+  \int P(x)\d{\alpha} = \sum w_i f(x_i)  
+\end{gather*}
+is exact for all polynomials of degree $2N-1$ or less.  To be used in constructing the
+DVR basis, the quadrature rule must be exact for polynomials of order $2(N-1) + 1 =
+2N-1$, thus, the [Gaussian quadrature][] provides an acceptable set of $N$ abscissa and
+weights for constructing the DVR basis using the formulae above.
+
+:::{margin}
+To calculate these weights and abscissa, see e.g. §4.6 of [Numerical
+Recipes](https://numerical.recipes/book.html).
+:::
+To obtain this order of accuracy, we must be free to choose both the weights and
+the points.  If we want $x_0$ and/or $x_{N-1}$ are the endpoints of the integration
+interval, then we must sacrifice one or two orders:
+
+* **[Gauss-Radau rules][]** or **Radau quadrature** fixes one endpoint and is exact up to order $2N-2$.
+* **[Gauss-Lobatto rules][]** or **Lobatto quadrature** fixes both endpoints and is exact up
+  to order $2N-3$.
+
+On the surface, this sees to be a problem for constructing the DVR basis, but as pointed
+out in {cite}`Schneider:2004`, the Radau quadrature based on the [Laguerre
+polynomials][] is find for solving the radial equation if we exclude the first abscissa
+$x_0 = 0$ where $u(0) = 0$.  Thus, we can use an $N+1$-point Radau quadrature, exact for
+polynomials of order $2N$, and take the $N$ positive abscissa and weights to construct
+the DVR basis.
+
+### Laguerre-Radau Quadrature
+
+:::{margin}
+Note that most implementations of $L_{n}^{(\alpha)}$ are not normalized:
+\begin{gather*}
+  \int_{0}^{\infty}\d{x}\; x^{\alpha}e^{-x}[L_{n}^{(\alpha)}(x)]^2 \\= 
+  \frac{\Gamma(n + \alpha + 1)}{\Gamma(n+1)}.
+\end{gather*}
+:::
+The [generalized Laguerre polynomials][] $L_{N}^{(\alpha)}$ are orthogonal on $[0,
+\infty)$ with weight $w(x) = x^{\alpha}e^{-x}$.  The Radau quadrature abscissa $x_i$
+include $x_0=0$ and the roots of $L_{N}^{(\alpha+1)}(x)$, with quadrature weights $w_i$
+{cite}`Gautschi:2000`:
+\begin{gather*}
+  L_{N}^{(\alpha+1)}(x_i) = 0, \qquad
+  w_{0} = \frac{\Gamma(\alpha+1)}{{N+\alpha+1} \choose {N}}, \qquad
+  w_{i} = \frac{\Gamma(\alpha+1)}{N+\alpha+1} {N+\alpha \choose N}
+          \frac{1}{[L_{N}^{(\alpha)}(x_i)]^2}.
+\end{gather*}
+
+```{code-cell} ipython3
+:tags: [hide-input]
+
+from warnings import warn
+
+from itertools import product
+
+import numpy as np
+from scipy.integrate import quad
+
+from phys_581.dvr import roots_genlaguerre_radau, LaguerreRadauDVR
+
+dvr = LaguerreRadauDVR(N=10)
+ns = range(dvr.N+1)
+for m in ns:
+    def f(r):
+        return dvr.get_w(r)*dvr.F(r,m)
+    assert np.allclose(quad(f, 0, np.inf)[0], sum(dvr.w*dvr.F(dvr.r, m)))
+
+for m, n in product(ns, ns):
+    # Orthonormality of P
+    def f(r):
+        return dvr.get_w(r)*dvr.P(r,m)*dvr.P(r,n)
+    np.allclose(quad(f, 0, np.inf)[0], 1 if n == m else 0)
+
+for m, n in product(ns, ns):
+    def f(r):
+        return dvr.get_w(r)*dvr.F(r,m)*dvr.F(r,n)
+    assert np.allclose(quad(f, 0, np.inf)[0], sum(dvr.w*dvr.F(dvr.r, m)*dvr.F(dvr.r, n)))
+
+for m, n in product(ns, ns):
+    def f(r):
+        return dvr.get_w(r)*dvr.F(r,m)*dvr.F(r,n,d=1)
+    assert np.allclose(quad(f, 0, np.inf)[0], sum(dvr.w*dvr.F(dvr.r, m)*dvr.F(dvr.r,n,d=1)))
+
+for m, n in product(ns, ns):
+    def f(r):
+        return dvr.get_w(r)*dvr.F(r,m,d=1)*dvr.F(r,n,d=1)
+    assert np.allclose(quad(f, 0, np.inf)[0], sum(dvr.w*dvr.F(dvr.r, m,d=1)*dvr.F(dvr.r,n,d=1)))
+
+#for m in range(1, dvr.N+1):
+#    def f(r):
+#        return dvr.get_w(r)*dvr.F(r, m)*r
+#    assert np.allclose(quad(f, 0, np.inf)[0], sum(dvr.w*dvr.F(dvr.r, m)*dvr.r))
+
+for m, n in product(ns, ns):
+    def f(r):
+        return (dvr.get_w(r)
+                * ((dvr.alpha - r)/2/r * dvr.F(r,m,d=0) + dvr.F(r,m,d=1))
+                * ((dvr.alpha - r)/2/r * dvr.F(r,n,d=0) + dvr.F(r,n,d=1)))
+    assert np.allclose(quad(f, 0, np.inf)[0]/2, dvr.T[m,n])
+```
+
+### Kinetic Energy
+
+To compute the kinetic energy we note that the basis functions are a sum of terms of the
+form
+\begin{gather*}
+  f(r) = \overbrace{\sqrt{r^{\alpha}e^{-r}}}^{\sqrt{w}}L(r),\qquad
+  f'(r) = \sqrt{w(r)}\left(\frac{\alpha - r}{2r}L + L'(r)\right).
+\end{gather*}
+Thus, we can compute the kinetic energy matrix using the quadrature forumlae:
+\begin{gather*}
+  K_{mn} = \braket{u_m|\left(-\tfrac{1}{2}\diff[2]{}{r}\right)|u_n} = 
+  \frac{1}{2}\int\d{r}\; u_{m}'(r) u_{n}'(r)\d{r}
+  =
+  \frac{1}{2}\sum_{i} w_i \frac{u_{m}'(r_i) u_{n}'(r_i)}{w(r_i)}
+\end{gather*}
+
+:::::{admonition} Detailed expressions for $N=1$ (used to check code).
+:class: dropdown
+
+Getting everything working here is quite challenging as there are lots of places for
+making mistakes. Ultimately we should have a comprehensive set of tests, but initially
+it is helpful to work with a small basis. Working through these and explicitly checking
+the code helped me find several subtle issues.  We take $N=1$ with two abscissa.
+
+With $\alpha = 0$, we have explicitly:
+\begin{align*}
+  P_0(r) = L_0^{(\alpha)}(r) &= 1\\
+  P_1(r) = L_1^{(\alpha)}(r) &= 1 +\alpha - r = 1-r\\
+  L_{1}^{(\alpha+1)}(r) &= 2+\alpha-r = 2 - r\\
+  w_0 = w_1 &= \frac{1}{2},\\
+  \mat{C} &= \frac{1}{\sqrt{2}}\begin{pmatrix}
+    1 & 1\\
+    1 & -1
+  \end{pmatrix},\\
+  F_0(r) &= \frac{P_0(r) + P_1(r)}{\sqrt{2}} = \frac{2-r}{\sqrt{2}}\\
+  F_1(r) &= \frac{P_0(r) - P_1(r)}{\sqrt{2}} = \frac{-r}{\sqrt{2}}\\
+  u_1(r) &= \tfrac{-1}{\sqrt{2}}re^{-r/2}.
+\end{align*}
+The abscissa are $r_0 = 0$ and $r_1 = 2$, the latter being the roots of
+$L_{N}^{(\alpha+1)}(r)$.
+
+For $\alpha=1$ we have
+\begin{align*}
+  P_0(r) = L_0^{(1)}(r) &= 1\\
+  P_1(r) = \tfrac{1}{\sqrt{2}}L_1^{(1)}(r) &= \frac{2 - r}{\sqrt{2}}\\
+  L_{1}^{(2)}(r) &= 3 - r\\
+  (w_0, w_1) &= (\tfrac{1}{3}, \tfrac{2}{3}),\\
+  \mat{C} &= \frac{1}{\sqrt{3}}
+  \begin{pmatrix}
+    1 & \sqrt{2}\\
+    \sqrt{2} & -1
+  \end{pmatrix},\\
+  F_0(r) = \frac{P_0(r) + \sqrt{2}P_1(r)}{\sqrt{3}} &= \frac{3 - r}{\sqrt{3}},\\
+  F_1(r) = \frac{\sqrt{2}P_0(r) - P_1(r)}{\sqrt{3}} &= \frac{r}{\sqrt{6}},\\
+  u_0(r) &= \tfrac{1}{\sqrt{3}}(3-r)\sqrt{r}e^{-r/2},\\
+  u_1(r) &= \tfrac{1}{\sqrt{6}}r\sqrt{r}e^{-r/2}
+\end{align*}
+Thus, despite the fact that the $\alpha = 1$ basis has $L_{n}^{(1)}$ basis polynomials,
+the factor of $\sqrt{r}$ ruins the convergence.
+
+Note that for $m = \alpha = \hbar = 1$, the first few state for Hydrogen are
+\begin{gather*}
+  u_{01}(r) = 2re^{-r}L_{0}^{(1)}(2r) = 2re^{-r}, \\
+  u_{02}(r) = \tfrac{1}{2\sqrt{2}} re^{-r/2}L_{1}^{(1)}(r)
+            = \tfrac{1}{4}e^{-r/2}(2-r)r.
+\end{gather*}
+:::::
+
+:::{margin}
+One might be able to look at the quantitative convergence using this idea.  For example,
+to have accuracy to order $\epsilon^3$, three of the highest basis function in the
+expansion would now be outside of the basis since they have an extra factor of $r^3$.
+There may be a path towards good error estimates here, but we resort to some experiments.
+:::
+One final comment: We have expressed our basis in some sort of "natural" units where $r$
+is dimensionless.  This is no good for physics.  Instead, we must choose a length scale
+$a$ in which to express our problem.  Once we choose, this scale, the basis can be used
+by scaling $r\rightarrow r/a$ to be dimensionless, and then adding the missing factors
+$\mat{K}/a^2$ to the kinetic energy.  To choose $a$, note that the quadrature is exact
+for radial wavefunctions of the form (setting $\alpha = 0$ here)
+\begin{gather*}
+  u(r) \propto e^{-r/2a}L\left(\frac{r}{a}\right).
+\end{gather*}
+This might indicate that an optimal choice is $a \propto n \propto 1/\sqrt{-E}$ for
+Coulomb-like potentials.  We will explore how well this works below, but note that
+choosing a slightly incorrect $a$ still works well because
+\begin{gather*}
+  e^{-r/2a + \epsilon r} 
+  = e^{-r/2a}\left(1 + \epsilon r + \frac{\epsilon^2}{2!}r^2 + \cdots\right).
+\end{gather*}
+Thus, the errors induce polynomial factors that are well represented in the basis.
 
 
 
 
+
+
+### Example: Coulomb-like Potentials.
+
+Here we use the Laguerre-Radau approach described above to solve for states in a
+Coulomb-like potential.
+
+```{code-cell} ipython3
+:tags: [hide-input]
+
+def get_Es(N=32, a=1.0):
+    dvr = LaguerreRadauDVR(N=N, alpha=0)
+    H = dvr.T[1:, 1:] + np.diag(-a/dvr.r[1:])
+    En = np.linalg.eigvalsh(H)/a**2
+    return En
+
+
+Nstates = 15
+a = 1.0
+Nmax = 200
+ns = 1+np.arange(Nstates)
+E_exact = -1/2/ns**2
+
+Ns = np.arange(Nstates, Nmax+1, 4)
+errs = [get_Es(N, a=a)[:Nstates]/E_exact - 1 for N in Ns]
+
+fig, ax = plt.subplots()
+ax.semilogy(Ns, np.abs(errs), '-+')
+ax.legend(1+np.arange(Nstates))
+ax.set(xlabel="Basis size $N$", ylabel="Relative error",
+       title=f"Lowest {Nstates} states: ${a=}$");
+```
+
+Here we see the convergence of the lowest 15 states as a function of basis size
+$N$. Around $N \approx 180$, numerical errors in the computation start to corrupt the
+basis, leading to zero weights (see warnings), overflows, etc.  While there might be ways to
+mitigate this (we have included one in the code, using exact integer math for some of
+the coefficients), it is probably not worth pursuing this direction.
+
+Instead, it us much more profitable to explore adjusting the length scale $a$.
+
+```{code-cell} ipython3
+:tags: [hide-input]
+
+Nstates = 15
+a = 1.0
+Nmax = 200
+ns = 1+np.arange(Nstates)
+E_exact = -1/2/ns**2
+
+Ns = np.arange(Nstates, Nmax+1, 4)
+errs = [get_Es(N, a=a)[:Nstates]/E_exact - 1 for N in Ns]
+
+fig, ax = plt.subplots()
+ax.semilogy(Ns, np.abs(errs), '-+')
+ax.legend(1+np.arange(Nstates), loc='left')
+ax.set(xlabel="Basis size $N$", ylabel="Relative error",
+       title=f"Lowest {Nstates} states: ${a=}$");
+```
 
 :::{margin}
 See {cite:p}`LC:2002` for details.  We follow most of the notations, except we use
@@ -501,6 +864,7 @@ for l in [0, 1, 2, 3, 4]:
 [glue]: <https://myst-nb.readthedocs.io/en/latest/use/glue.html>
 [hydrogenic atoms]: <https://en.wikipedia.org/wiki/Hydrogen-like_atom>
 [orthogonal polynomials]: <https://en.wikipedia.org/wiki/Orthogonal_polynomials>
+[Gaussian quadrature]: <https://en.wikipedia.org/wiki/Gaussian_quadrature>
 
 ```{code-cell} ipython3
 k = 2*np.pi * np.fft.fftfreq(N, dx)
@@ -518,7 +882,6 @@ E[:10].real
 ```{code-cell} ipython3
 
 ```
-
 
 ## See Also
 
@@ -538,3 +901,10 @@ E[:10].real
 [principal quantum number]: <https://en.wikipedia.org/wiki/Principal_quantum_number>
 [azimuthal quantum number]: <https://en.wikipedia.org/wiki/Azimuthal_quantum_number>
 [magnetic quantum number]: <https://en.wikipedia.org/wiki/Magnetic_quantum_number>
+[Numba]: <https://numba.pydata.org/>
+
+[Gauss-Radau rules]: <https://mathworld.wolfram.com/RadauQuadrature.html>
+[Gauss-Lobatto rules]: <https://en.wikipedia.org/wiki/Gaussian_quadrature#Gauss%E2%80%93Lobatto_rules>
+[Laguerre polynomials]: <https://en.wikipedia.org/wiki/Laguerre_polynomials>
+[generalized Laguerre polynomials]: <https://en.wikipedia.org/wiki/Laguerre_polynomials#Generalized_Laguerre_polynomials>
+[Lebesque-Stieltjes integral]: <https://en.wikipedia.org/wiki/Lebesgue%E2%80%93Stieltjes_integral>

@@ -84,6 +84,7 @@ ifeq ($(COCALC_OPTION), micromamba)
 INIT_DEPS += ~/.local/bin/micromamba
 endif
 INIT_DEPS += environment.yaml
+INIT_DEPS += pyproject.toml
 INIT_DEPS += $(ENV_PATH)
 
 ifdef CONDA_SUBDIR
@@ -119,8 +120,10 @@ endif
 	$(_RUN) python3 -m ipykernel install --user --name "phys-581" \
                                       --display-name "Python 3 (phys-581)"
 
-$(ENV_PATH): environment.yaml
+$(ENV_PATH): environment.yaml pyproject.toml
 	$(CREATE_ENV)
+	# Would be nice if we can do this in the environment.yaml file.
+	$(_RUN) python3 -m pip install --upgrade .[test]
 
 # Jupytext
 sync:
@@ -146,11 +149,13 @@ clean: cleanspace cleandocs
 realclean: clean
 	$(RM) -r envs
 
-test:
-	$(ANACONDA_PROJECT) run test
+.PHONY: init lock sync clean cleanspace realclean tools
 
+test: $(ENV_PATH)
+	$(_RUN) pytest
 
-.PHONY: init lock sync clean cleanspace realclean test tools
+.PHONY: test
+
 ######################################################################
 # Tools
 #

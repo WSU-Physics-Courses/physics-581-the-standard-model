@@ -2,7 +2,7 @@ name: phys-581
 channels:
   - defaults
 dependencies:
-  - python>=3.9
+  - python>=3.9,<3.12
 
   # Core dependencies
   - scipy
@@ -20,8 +20,6 @@ dependencies:
   # Pip-only dependencies
   - pip
   - pip:
-    - mmf_setup
-
     # Testing
     - pytest-cov
     - pytest-flake8
@@ -49,4 +47,4 @@ dependencies:
     - mmf-setup
     - ruamel-yaml
     # The current project, and dependencies in pyproject.toml.
-    - .
+    - -e .
