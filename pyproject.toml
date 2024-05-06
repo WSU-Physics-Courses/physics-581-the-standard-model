@@ -18,6 +18,7 @@ classifiers = [
     "Topic :: Utilities",
     "Programming Language :: Python",
     "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
@@ -28,13 +29,26 @@ classifiers = [
 
 requires-python = '>=3.9,<3.12'
 dependencies = [
-    'scipy>=1.7.1',
-    'matplotlib>=3.4.3',
-    'mmf-setup>=0.4.11',
-    'uncertainties>=3.1.5',
-    'tqdm',
-    'mmfutils',
-    'cython>=3.0.6'
+  # Pip dependencies (cookiecutter.pip_dependencies)
+  "mmf-setup",
+
+  # ipykernel will bring in ipython, but this has specific python
+  # restrictions that we codify here.
+  'ipython >= 7.16.3; python_version < "3.7"',
+  'ipython >= 7.34.0; python_version < "3.8"',
+  'ipython >= 8.12.3; python_version < "3.9"',
+  'ipython >= 8.18.1; python_version < "3.10"',
+  'ipython >= 8.20.0; python_version >= "3.10"',
+
+  'ipykernel >= 6.16.2; python_version < "3.8"',
+  'ipykernel >= 6.29.0; python_version >= "3.8"',
+
+  'setuptools >= 68.0.0; python_version < "3.8"',
+  'setuptools >= 69.0.3; python_version >= "3.8"',
+  'setuptools-scm >= 7.1.0; python_version < "3.8"',
+  'setuptools-scm >= 8.0.4; python_version >= "3.8"',
+  
+  'mmf-setup>=0.4.11',
 ]
 
 # Optional dependencies for testing, building the docs, etc.
@@ -42,57 +56,60 @@ dependencies = [
 test = [
     'pytest>=7.0.1',
     'coverage[toml]; python_version < "3.7"', 
-    'coverage[toml]>=7.2.2; python_version >= "3.7"', 
+    'coverage[toml]>=7.2.2; python_version >= "3.7"',
+    'pytest-cov',
     'pytest-html',
     'pytest-xdist',
     'psutil',
     'phys-581-the-standard-model-of-particle-physics[full]',
 ]
 docs = [
-    'sphinx>=5.3.0',
-    'mock',
-    'nbsphinx>=0.8.8',
-    'pycallgraph>=1.0.1',
-    'sphinxcontrib-zopeext>=0.3.3',
-    'ipython >= 7.16.3; python_version < "3.7"',
-    'ipython >= 7.23.1; python_version >= "3.7"',
-    'mmf-setup>=0.4.11',
-    'sphinx-panels>=0.6.0',
-    'sphinx-book-theme>=0.1.9',
-    'sphinxcontrib-zopeext>=0.2.4',
-    'sphinxcontrib-bibtex>=2.3.0',
-    'myst-nb>=0.12.3',
-    'sphinxcontrib.zopeext',
-    'nbconvert',
+    'myst-nb >= 0.17.2; python_version < "3.9"',
+    'myst-nb >= 1.0.0; python_version >= "3.9"',
+
+    'sphinx >= 7.1.2; python_version < "3.9"',
+    'sphinx >= 7.2.6; python_version >= "3.9"',
+
+    'sphinx-book-theme >= 0.0.39; python_version < "3.9"', 
+    'sphinx-book-theme >= 1.1.0; python_version >= "3.9"',
+    'sphinx-jupyterbook-latex >= 0.5.2; python_version < "3.9"',
+    'sphinx-jupyterbook-latex >= 1.0.0; python_version >= "3.9"',
+
+    'sphinx-togglebutton >= 0.3.2',
+    'sphinx-design >= 0.5.0',
+    'sphinxext-opengraph >= 0.9.1',
+    'sphinx-comments >= 0.0.3',
+    'nbsphinx >= 0.9.3',
+
+    'sphinx-autobuild >= 2021.3.14',
+
+    'sphinxcontrib-zopeext >= 0.4.3',
+    'sphinxcontrib-bibtex >= 2.3.0',
+
+    'mock >= 5.1.0',
+    'callgraph4py >= 2.0.0',
+    'nbconvert >= 7.14.2',
 ]
+
 full = [
     'scipy >= 1.5.4; python_version < "3.7"',
     'scipy >= 1.7.3; python_version < "3.10" and python_version >= "3.7"',
     'scipy >= 1.10.1; python_version >= "3.10"',
     # This version of numpy has universal wheels
-    'numpy>=1.21.0; python_version >= "3.8"',
+    'numpy >= 1.21.0; python_version >= "3.8"',
+    'matplotlib >= 3.4.3',
+    'uncertainties >= 3.1.5',  
 ]
+
 all = [
     'phys-581-the-standard-model-of-particle-physics[full,test,docs]',
 ]
-
 
 [project.urls]
 Documentation = 'https://physics-581-the-standard-model.readthedocs.io/en/latest'
 Issues = 'https://gitlab.com/wsu-courses/physics-581-the-standard-model/issues'
 GitLab = 'https://gitlab.com/wsu-courses/physics-581-the-standard-model'
 'GitHub Mirror' = 'https://github.com/WSU-Physics-Courses/physics-581-the-standard-model'
-
-
-[tool.pdm]
-[tool.pdm.dev-dependencies]
-tools = [
-      'black>21.4b2',
-      'mercurial>=5.7.1',
-      'hg-git>=0.10.0',
-      'hg-evolve>=10.3.1',
-]
-
 
 [build-system]
 
@@ -133,14 +150,13 @@ markers = [
 ]
 addopts = [
     "-m not bench",
-
     "-k not test_official_assignment",
+
     "--doctest-modules",
     "--cov",
-    "--cov-report=term",
     "--cov-report=html",
     #"--cov-report=xml",
-    #"--cov-fail-under=85",
+    "--cov-fail-under=85",
     #"--no-cov-on-fail",
     #"--html=_artifacts/pytest_report.html",
     #"--junitxml=_artifacts/junit.xml",

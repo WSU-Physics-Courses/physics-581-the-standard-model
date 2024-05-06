@@ -11,6 +11,7 @@ _ext/
 _trash/
 _artifacts/
 _build/
+build/
 
 __pycache__
 __pypackages__

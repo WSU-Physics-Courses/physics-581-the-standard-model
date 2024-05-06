@@ -6,7 +6,7 @@
 
 # -- Path setup --------------------------------------------------------------
 
-# If extensions (or modules to document with autodoc) are in another directory,
+# If extensions (or modules to document with napoleon) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
@@ -43,6 +43,13 @@ author = "Michael McNeil Forbes"
 release = "0.1"
 
 
+# Check if we are online.
+try:
+    request.urlopen("https://cdn.jsdelivr.net/", timeout=1)
+    online = True
+except request.URLError as err:
+    online = False
+
 # -- General configuration ---------------------------------------------------
 
 # Add any Sphinx extension module names here, as strings. They can be
@@ -50,19 +57,19 @@ release = "0.1"
 # ones.
 extensions = [
     "myst_nb",
-    "sphinx.ext.autodoc",
-    "sphinx.ext.autosummary",
     "sphinx.ext.coverage",
     "sphinx.ext.doctest",
     "sphinx.ext.ifconfig",
-    "sphinx.ext.intersphinx",
     "sphinx.ext.mathjax",
     "sphinx.ext.napoleon",
     "sphinx.ext.todo",
     "sphinx.ext.viewcode",
     "sphinxcontrib.bibtex",
-    "sphinxcontrib.zopeext.autointerface",
     "matplotlib.sphinxext.plot_directive",
+    # For documenting source code.
+    "sphinx.ext.napoleon",
+    "sphinx.ext.autosummary",
+    "sphinxcontrib.zopeext.autointerface",
     # From jupyterbook
     # "jupyter_book",
     # "sphinx_thebe",
@@ -75,6 +82,9 @@ extensions = [
     "sphinx_togglebutton",
     # "recommonmark",
 ]
+
+if online:
+    extensions.append("sphinx.ext.intersphinx")
 
 # Make sure that .rst comes first or autosummary will fail.  See
 # https://github.com/sphinx-doc/sphinx/issues/9891
@@ -329,7 +339,7 @@ def my_init(app):
     run init` as normal, this will create a **whole new conda environment** and install
     the kernel from there.
     """
-    mathjax_offline = False
+    mathjax_offline = not online
     if on_rtd:
         subprocess.check_call(
             [
@@ -349,6 +359,12 @@ def my_init(app):
         print("Not On RTD!")
         ROOT = str(Path(__file__).parent.parent)
         subprocess.check_call(["make", "-C", ROOT, "init"])
+
+        # Check if we can access the MathJaX CDN.  If not, fallback to local files.
+        try:
+            request.urlopen("https://cdn.jsdelivr.net/", timeout=1)
+        except request.URLError as err:
+            mathjax_offline = True
 
         # Check if we can access the MathJaX CDN.  If not, fallback to local files.
         try:
@@ -386,6 +402,7 @@ def my_init(app):
         app.config.mathjax_path = "mathjax/tex-chtml.js"
         app.config.mathjax_path = "mathjax/tex-svg.js"
         app.config.mathjax_path = "mathjax/tex-chtml.js?config=TeX-AMS-MML_HTMLorMML"
+        app.config.mathjax_path = "mathjax/tex-chtml.js"
 
         # I don't know why this is needed, but if it is not turned off, then
         # "mathjax_ignore" is added to the top-level class, preventing local rendering.

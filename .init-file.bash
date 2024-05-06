@@ -1,5 +1,10 @@
 export PS1="\h:\W \u\$ "
-# Assume that this is set by running anaconda-project run shell
+# Assume that this is set by running anaconda-project run shell, micromamba, etc.
+# However, first allow the user (our Makefile) to explicitly set it by optionally
+# defining CUSTOM_CONDA_PREFIX.  This allows one to avoid the possibility that
+# the system files change this between invocation and loading of this script.
+# See Issue #1.
+CONDA_PREFIX="${CUSTOM_CONDA_PREFIX:-${CONDA_PREFIX}}"
 CONDA_ENV="${CONDA_PREFIX}"
 eval "$(micromamba shell hook --shell=bash)"
 
