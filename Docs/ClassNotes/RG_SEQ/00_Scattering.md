@@ -435,25 +435,58 @@ This requirement can be loosened to requiring
 \end{gather*}
 :::
 For a different perspective, we now consider scattering in 1D.  We consider scattering
-off of a potential $V(x)$ that has compact support about the origin $V(x) = 0$ for
-$\abs{x}>R$.  We then write 
+of a state with energy $E_k$ off of a potential $V(x)$ that has compact
+support $\abs{x} < R$ about the origin. (I.e. $V(x) = 0$ for $\abs{x}>R$.)  We then write 
 \begin{gather*}
+   E_k = \frac{\hbar^2k^2}{2m}, \qquad
   \psi(x) = \begin{cases}
-    e^{\I k x} +  R(k) e^{-\I kx} & x < -R,\\
-    T(k) e^{\I k x} & x > R.
+    t_k e^{-\I k x} & x < -R, \\
+    e^{-\I k x} +  r_k e^{\I k x} & x > R.
   \end{cases}
 \end{gather*}
-This corresponds to an incoming plane wave with momentum $k$ reflecting off the barrier
-with reflection coefficient $R(k)$ and transmission coefficient $T(k)$.  Conservation of
+This corresponds to an incoming plane wave with momentum $-k$ reflecting off the barrier
+with reflection amplitude $r_k$ and transmission amplitude $t_k$.  Conservation of
 probability requires
 \begin{gather*}
-  \abs{R_k}^2 + \abs{T_k}^2 = 1.
+  \abs{r_k}^2 + \abs{t_k}^2 = 1.
 \end{gather*}
 In addition to the **scattering states**, the potential may support a finite number of
 **bound states** with energy
 \begin{gather*}
-  E_n = - \frac{\hbar^2 \kappa_n^2}{2m}.
+  E_n = - \frac{\hbar^2 \kappa_n^2}{2m}, \qquad
+  \psi_n(x) = \begin{cases}
+    d_{n}e^{\kappa_n x} & x < -R,\\
+    c_{n}e^{-\kappa_n x} & x > R,
+  \end{cases}, \qquad
+  \int_{-\infty}^{\infty}\d{x}\; \abs{\psi(x)}^2 = 1.
 \end{gather*}
+
+This scattering data -- $[r_k, t_k, c_n, \kappa_n]$ -- can be collected into a single
+function
+\begin{gather*}
+  F(x) = \int \frac{\d{k}}{2\pi} r_k e^{\I k x} + \sum_{n} c_n^2 e^{-\kappa_n x}.
+\end{gather*}
+
+Apparently, solving the Gelfand-Levitan-Marchenko (GLM) equation allows one to
+reconstruct the potential
+\begin{gather*}
+    K(x, y) + F(x+y) + \int_x^{\infty} K(x, z)F(z+y)\d{z} = 0,\\
+    V(x) = -2\diff{K(x, x)}{x}.
+\end{gather*}
+
+\begin{gather*}
+  K(x, y) + F(x+y) + \int_x^{\infty} K(x, z)F(z+y)\d{z} = 0,\\
+  K_{,x}(x, y) + F'(x+y) - K(x, x)F(x+y) + \int_x^{\infty} K_{,x}(x, z)F(z+y)\d{z} = 0\\
+  K_{,y}(x, y) + F'(x+y) + \int_x^{\infty} K(x, z)F'(z+y)\d{z} = 0\\
+  F'(x) = \int \frac{\d{k}}{2\pi} \I k r_k e^{\I k x} - \sum_{n} \kappa_n c_n^2 e^{-\kappa_n x},\\
+  \diff{K(x, x)}{x} = -2F'(2x) + K(x, x)F(2x) - \int_x^{\infty} [K(x, z) + K_{,x}(x, z)]F(z+x)\d{z}.
+\end{gather*}
+
+
+
+
+
+
 
 
 

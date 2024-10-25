@@ -21,3 +21,4 @@ envs/
 *.sage-jupyter2
 *.term
 *.orig
+*.egg-info

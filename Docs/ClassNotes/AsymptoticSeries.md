@@ -7,9 +7,9 @@ jupytext:
     format_version: 0.13
     jupytext_version: 1.15.2
 kernelspec:
-  display_name: Python 3 (phys-581)
+  display_name: Python 3
   language: python
-  name: phys-581
+  name: python3
 ---
 
 ```{code-cell} ipython3
@@ -109,7 +109,7 @@ function $f(\epsilon)$ if, for *fixed $N$* and *sufficiently small* $\epsilon$:
 \begin{gather*}
   \left| f(\epsilon) - \sum_{n=0}^{N} a_n \epsilon^n\right| \sim O(\epsilon^{N+1}).
 \end{gather*}
-*(See {cite:p}`Boyd:1999` for details.)*
+*(See {cite}`Boyd:1999` for details.)*
 :::
 Note that this is not what we typically want in terms of convergence.  Rather, we would
 like to know that, for sufficiently small but fixed $\epsilon$, the power series will
@@ -292,7 +292,7 @@ for ne, eps in zip(nes, epss):
     )
 err_est0 = 1/np.sqrt(np.pi*(nes))*np.exp(0.5-nes)
 err_est = (1+1/nes)**(nes+1)*np.exp(1/2/nes)/np.sqrt(np.pi*(nes+1))*np.exp(-(nes+1))
-ax.semilogy(nes, err_est0, '_b', label=r"$e^{0.5-N}/\sqrt{\pi N}}$")
+ax.semilogy(nes, err_est0, '_b', label=r"$e^{0.5-N}/\sqrt{\pi N}$")
 ax.semilogy(nes, err_est, ':k+', label="")
 
 ax.set(xlabel="$N$ (perturbation order)", 
